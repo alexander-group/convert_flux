@@ -1,0 +1,58 @@
+name: Continuous Delivery
+
+on:
+  push:
+    branches:
+      - main
+
+# default: least privileged permissions across all jobs
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-release-${{ github.ref_name }}
+      cancel-in-progress: false
+
+    permissions:
+      contents: write
+
+    steps:
+      # Note: We checkout the repository at the branch that triggered the workflow.
+      # Python Semantic Release will automatically convert shallow clones to full clones
+      # if needed to ensure proper history evaluation. However, we forcefully reset the
+      # branch to the workflow sha because it is possible that the branch was updated
+      # while the workflow was running, which prevents accidentally releasing un-evaluated
+      # changes.
+      - name: Setup | Checkout Repository on Release Branch
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref_name }}
+          token: ${{ secrets.SEMVER_PAT_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup | Force release branch to be at workflow sha
+        run: |
+          git reset --hard ${{ github.sha }}
+
+      - name: Action | Semantic Version Release
+        id: release
+        # Adjust tag with desired version if applicable.
+        uses: python-semantic-release/python-semantic-release@v10.5.2
+        with:
+          github_token: ${{ secrets.SEMVER_PAT_TOKEN }}
+          git_committer_name: "github-actions"
+          git_committer_email: "actions@users.noreply.github.com"
+
+      - name: Publish | Upload to GitHub Release Assets
+        uses: python-semantic-release/publish-action@v10.5.2
+        if: steps.release.outputs.released == 'true'
+        with:
+          github_token: ${{ secrets.SEMVER_PAT_TOKEN }}
+          tag: ${{ steps.release.outputs.tag }}
+
+    outputs:
+      released: ${{ steps.release.outputs.released || 'false' }}
