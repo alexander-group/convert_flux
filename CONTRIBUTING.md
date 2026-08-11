@@ -1,4 +1,4 @@
-# Contributing to [Project Name]
+# Contributing to `convert_flux`
 
 Thank you for your interest in contributing to `convert_flux`! We welcome and encourage contributions 
 of many kinds. Our goal is to keep this a positive, inclusive, successful, and growing community.
