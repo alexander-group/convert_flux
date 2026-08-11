@@ -95,7 +95,7 @@ Use descriptive branch names like `fix-bug-123` or `add-feature-xyz`.
 
 ### Commit Your Changes
 Commit message guidelines:
-- Make sure to use a commit-tag for [semantic versioning](https://www.geeksforgeeks.org/software-engineering/introduction-semantic-versioning/) because our package releases are automated using (`python-semantic-release`)[https://python-semantic-release.readthedocs.io/en/latest/]. `python-semantic-release` is configured to follow the [conventional commit guidlines](https://www.conventionalcommits.org/en/v1.0.0/). As a summary:
+- Make sure to use a commit-tag for [semantic versioning](https://www.geeksforgeeks.org/software-engineering/introduction-semantic-versioning/) because our package releases are automated using [`python-semantic-release`](https://python-semantic-release.readthedocs.io/en/latest/). `python-semantic-release` is configured to follow the [conventional commit guidlines](https://www.conventionalcommits.org/en/v1.0.0/). As a summary:
 	- For small changes start the commit message with `fix:` to increment the minor tag in the version
    - For new features or larger changes start the commit message with `feat:` to increment the middle tag in the version
 - Use the present tense ("add feature" not "added feature")
