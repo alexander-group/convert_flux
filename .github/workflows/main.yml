@@ -38,7 +38,7 @@ jobs:
 
       - name: Upgrade pip and build tools
         run: |
-          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade pip setuptools wheel pytest-cov
 
       - name: Build otter
         run: pip install --no-cache-dir .
