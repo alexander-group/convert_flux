@@ -69,7 +69,6 @@ Frequency
 * ``MHz``
 * ``GHz``
 
-
 Luminosity
 ~~~~~~~~~~~
 
