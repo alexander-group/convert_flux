@@ -15,11 +15,14 @@ Separate classes/functions for each type of calculation/conversion
 - input validation (check equivalency, convert to one standard unit that we decide on)
 - mag to flux density (class)
     - functions for each type of magnitude (AB, Vega, ST) *just write for AB for now*
-- flux to luminosity
+- flux from/to luminosity (class)
     - function for calculation
-- flux density to flux
-    - function to read transmission curve file (pandas dataframe)
+- flux density to flux (class)
+    - function to read transmission curve file (NumPy array)
     - function to do calculation
+- Mag (u.Unit)
+- Flux (u.Unit)
+- FluxDensity (u.Unit)
 
 
 """

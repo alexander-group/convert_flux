@@ -43,7 +43,7 @@ Flux Density
 
 Frequency-based
 
-* ``Jy`` - Default
+* ``mJy`` - Default
 * ``erg / (s cm^2 Hz)``
 * ``W / (m^2 Hz)``
 
@@ -52,22 +52,6 @@ Wavelength-based
 
 * ``erg / (s cm^2 Angstrom)`` - Default
 * ``W / (m^2 nm)``
-
-Wavelength
-~~~~~~~~~~~
-
-* ``Angstrom`` - Default
-* ``nm``
-* ``m``
-* ``um``
-
-Frequency
-~~~~~~~~~~~
-
-* ``Hz`` - Default
-* ``kHz``
-* ``MHz``
-* ``GHz``
 
 Luminosity
 ~~~~~~~~~~~
