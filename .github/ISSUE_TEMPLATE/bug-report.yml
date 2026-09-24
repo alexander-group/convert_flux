@@ -1,0 +1,67 @@
+name: Bug Report
+description: Something isn't working as I expect
+title: "[Bug]: "
+labels: ["bug"]
+assignees: []
+
+body:
+- type: markdown
+  attributes:
+    value: |
+      Thanks for reporting this bug! Please make sure you have checked closed issues and fill out the following information:
+
+- type: input
+  attributes:
+    label: "Version of `convert_flux`"
+    placeholder: "XX.YY.ZZ"
+  validations:
+    required: true
+
+- type: input
+  attributes:
+    label: "Version of `NumPy`"
+    placeholder: "XX.YY.ZZ"
+  validations:
+    required: true
+
+- type: input
+  attributes:
+    label: "Version of `astropy`"
+    placeholder: "XX.YY.ZZ"
+  validations:
+    required: true
+
+- type: textarea
+  id: other-packages
+  attributes:
+    label: "Other Relevant Package Versions"
+    description: "Please list any other relevant package versions (ex. pandas, infer_filter_info, etc.)"
+
+- type: textarea
+  id: description
+  attributes:
+    label: "Describe the Bug"
+    description: |
+      '''
+      **Describe the bug**
+      A clear and concise description of what the bug is.
+      **To Reproduce**
+      Steps to reproduce the behavior:
+      1. Go to '...'
+      2. Click on '....'
+      3. Scroll down to '....'
+      4. See error
+      **Expected behavior**
+      A clear and concise description of what you expected to happen.
+      **Screenshots**
+      If applicable, add screenshots to help explain your problem.
+      **Environment info (please complete the following information):**
+      - PC hardware: [e.g. vagrant VM, flight computer hostname, personal computer]
+      - OS: [e.g. Debian, Ubuntu, Mac OS]
+      - Software version [e.g. release number or commit hash]
+      **Additional context**
+      Add any other context about the problem here.
+      '''
+- type: markdown
+  attributes:
+    value: "Thanks again for filling out this bug report! We will get to it and respond as soon as possible!"
