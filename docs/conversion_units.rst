@@ -43,7 +43,7 @@ Flux Density
 
 Frequency-based
 
-* ``mJy`` - Default
+* ``uJy`` - Default
 * ``erg / (s cm^2 Hz)``
 * ``W / (m^2 Hz)``
 
