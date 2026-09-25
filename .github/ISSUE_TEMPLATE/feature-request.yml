@@ -1,0 +1,41 @@
+name: Feature Request
+description: There is something I wish convert_flux had
+title: "[Feature]: "
+labels: ["enhancement"]
+assignees: []
+
+body:
+- type: markdown
+  attributes:
+    value: |
+      Thanks for thinking of this feature! Please make sure you have checked closed issues and fill out the following information:
+
+- type: input
+  attributes:
+    label: "Version of `convert_flux`"
+    placeholder: "XX.YY.ZZ"
+  validations:
+    required: true
+
+- type: textarea
+  id: description
+  attributes:
+    label: "Describe the Feature"
+    description: |
+      """
+      ## Task
+      Describe in a few sentences what the task is. We need to [...] in order
+      to [...].
+      ## Acceptance
+      Describe what must exist in order for the task to be considered done:
+      code changes, specific/nonstandard testing expectations, documentation,
+      or a follow-on task.
+      ## Details
+      All the nitty-gritty details someone might need to know in order to get
+      started. Any helpful context or links, code snippets, line numbers, file
+      names.
+      """
+
+- type: markdown
+  attributes:
+    value: Thanks again for filling out this feature request! We will respond with our ideas as soon as possible!
