@@ -19,8 +19,9 @@ def test_flux_density_output_type():
     """
     abmag = 20.0 * u.ABmag
     unit_type = u.erg / (u.s * u.cm**3)
+    transmission_curve = ""
 
-    flux_density = convert_flux(abmag, unit_type)
+    flux_density = convert_flux(abmag, unit_type, transmission_curve)
 
     assert isinstance(flux_density, u.Quantity)
 
@@ -35,7 +36,8 @@ def test_abmag_to_flux_density():
     """
     abmag = 20.0 * u.ABmag
     unit_type = u.erg / (u.s * u.cm**3)
-    flux_density = convert_flux(abmag, unit_type)
+    transmission_curve = ""
+    flux_density = convert_flux(abmag, unit_type, transmission_curve)
 
     expected_flux_density = 3.631e-28 * (u.erg / (u.s * u.cm**3))
     assert (
