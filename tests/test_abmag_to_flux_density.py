@@ -1,4 +1,5 @@
 import pytest
+from astropy import units as u
 
 from convert_flux import convert_flux
 
@@ -16,28 +17,27 @@ def test_flux_density_output_type():
     Magnitude
     unit type of magnitude (AB mag)
     """
-    abmag = 20.0
-    unit_in = "ABMag"
-    unit_out = "erg/s/cm^2/Hz"
-    flux_density = convert_flux(abmag, unit_in, unit_out)
+    abmag = 20.0 * u.ABmag
+    unit_type = u.erg / (u.s * u.cm**3)
 
-    assert isinstance(flux_density, float)
+    flux_density = convert_flux(abmag, unit_type)
+
+    assert isinstance(flux_density, u.Quantity)
 
 
 @pytest.mark.xfail(reason="The convert_flux function is not implemented yet.")
 def test_abmag_to_flux_density():
-    # Test case 1: Convert a known AB magnitude to flux_density in Jy = erg/s/cm^2/Hz
+    # Test case 1: Convert a known AB magnitude to flux_density in Jy = erg/s/cm^3
     """
     Arguments:
     Magnitude
     unit type of magnitude (AB mag)
     """
-    abmag = 20.0
-    unit_in = "ABMag"
-    unit_out = "erg/s/cm^2/Hz"
-    flux_density = convert_flux(abmag, unit_in, unit_out)
+    abmag = 20.0 * u.ABmag
+    unit_type = u.erg / (u.s * u.cm**3)
+    flux_density = convert_flux(abmag, unit_type)
 
-    expected_flux_density = 3.631e-28
+    expected_flux_density = 3.631e-28 * (u.erg / (u.s * u.cm**3))
     assert (
         abs(flux_density - expected_flux_density) <= 1e-6
     ), f"Expected {expected_flux_density}, but got {flux_density}"
