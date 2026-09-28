@@ -57,5 +57,4 @@ Luminosity
 ~~~~~~~~~~~
 
 * ``erg / s`` - Default
-* ``W``
-* ``Solar luminosity (L_sun)``
+* ``Any other luminosity units supported by Astropy``
