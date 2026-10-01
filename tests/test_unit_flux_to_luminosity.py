@@ -33,7 +33,7 @@ def test_flux_to_luminosity_sdss_r():
     expected_luminosity = 1.54e39 * u.erg * (u.s**-1)
 
     assert (
-        luminosity - expected_luminosity <= 1e-6
+        abs(luminosity - expected_luminosity) / expected_luminosity <= 1e-3
     ), f"Expected {expected_luminosity}, but got {luminosity}"
 
 
@@ -50,5 +50,5 @@ def test_flux_to_luminosity_ztf_r():
     expected_luminosity = 1.95e39 * u.erg * (u.s**-1)
 
     assert (
-        abs(luminosity - expected_luminosity) <= 1e-6
+        abs(luminosity - expected_luminosity) / expected_luminosity <= 1e-3
     ), f"Expected {expected_luminosity}, but got {luminosity}"
