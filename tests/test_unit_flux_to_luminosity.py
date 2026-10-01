@@ -22,6 +22,7 @@ def test_luminosity_output_type():
 
 @pytest.mark.xfail(reason="The convert_flux function is not implemented yet.")
 # Define test unit for converting SDSS r-band flux to luminosity
+# Set tolerance to be 0.1% of the expected value
 def test_flux_to_luminosity_sdss_r():
     """
     Args:
@@ -32,12 +33,13 @@ def test_flux_to_luminosity_sdss_r():
     expected_luminosity = 1.54e39 * u.erg * (u.s**-1)
 
     assert (
-        abs(luminosity - expected_luminosity) <= 1e-5
+        abs(luminosity - expected_luminosity) / expected_luminosity <= 1e-3
     ), f"Expected {expected_luminosity}, but got {luminosity}"
 
 
 @pytest.mark.xfail(reason="The convert_flux function is not implemented yet.")
 # Define test unit for converting ZTF r-band flux to luminosity
+# Set tolerance to be 0.1% of the expected value
 def test_flux_to_luminosity_ztf_r():
     """
     Args:
@@ -48,5 +50,5 @@ def test_flux_to_luminosity_ztf_r():
     expected_luminosity = 1.95e39 * u.erg * (u.s**-1)
 
     assert (
-        abs(luminosity - expected_luminosity) <= 1e-5
+        abs(luminosity - expected_luminosity) / expected_luminosity <= 1e-3
     ), f"Expected {expected_luminosity}, but got {luminosity}"
