@@ -17,7 +17,7 @@ def test_luminosity_output_type():
     ## Luminosity output
     luminosity_sdss_r = convert_flux(flux_value_sdss_r)
 
-    assert isinstance(luminosity_sdss_r, float)
+    assert isinstance(luminosity_sdss_r, u.Quantity)
 
 
 @pytest.mark.xfail(reason="The convert_flux function is not implemented yet.")
@@ -29,7 +29,7 @@ def test_flux_to_luminosity_sdss_r():
     """
     flux = 3.21e-14 * u.erg * (u.s**-1) * (u.cm**-2)
     luminosity = convert_flux(flux)
-    expected_luminosity = 1.54e39
+    expected_luminosity = 1.54e39 * u.erg * (u.s**-1)
 
     assert (
         abs(luminosity - expected_luminosity) <= 1e-5
@@ -45,7 +45,7 @@ def test_flux_to_luminosity_ztf_r():
     """
     flux = 4.08e-14 * u.erg * (u.s**-1) * (u.cm**-2)
     luminosity = convert_flux(flux)
-    expected_luminosity = 1.95e39
+    expected_luminosity = 1.95e39 * u.erg * (u.s**-1)
 
     assert (
         abs(luminosity - expected_luminosity) <= 1e-5
