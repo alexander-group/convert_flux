@@ -25,7 +25,7 @@ def test_luminosity_output_type():
 def test_flux_to_luminosity_sdss_r():
     """
     Args:
-        flux (float): flux value
+        flux (astropy quantity): flux value
     """
     flux = 3.21e-14 * u.erg * (u.s**-1) * (u.cm**-2)
     luminosity = convert_flux(flux)
@@ -41,7 +41,7 @@ def test_flux_to_luminosity_sdss_r():
 def test_flux_to_luminosity_ztf_r():
     """
     Args:
-        flux (float): flux value
+        flux (astropy quantity): flux value
     """
     flux = 4.08e-14 * u.erg * (u.s**-1) * (u.cm**-2)
     luminosity = convert_flux(flux)
