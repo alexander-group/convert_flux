@@ -3,7 +3,6 @@ import astropy.units as u
 from convert_flux.convert_flux import FluxDensity
 
 
-@pytest.mark.xfail(reason="The fluxdensity class is not implemented yet.")
 def test_fluxdensity_quantity_created():
     flux_density1 = FluxDensity(
         quantity=36.31 * u.Jy, spectral_coordinate=6187 * u.Angstrom
@@ -16,7 +15,6 @@ def test_fluxdensity_quantity_created():
     assert isinstance(flux_density2, FluxDensity)
 
 
-@pytest.mark.xfail(reason="The fluxdensity class is not implemented yet.")
 def test_flux_density_quantity_is_quantity():
     flux_density1 = FluxDensity(
         quantity=36.31 * u.Jy, spectral_coordinate=6187 * u.Angstrom
@@ -29,25 +27,21 @@ def test_flux_density_quantity_is_quantity():
     assert isinstance(flux_density2.quantity, u.Quantity)
 
 
-@pytest.mark.xfail(reason="The fluxdensity class is not implemented yet.")
 def test_wrong_unit_flux_density():
     with pytest.raises(u.UnitConversionError):
         FluxDensity(quantity=36.31 * u.kg, spectral_coordinate=6187 * u.Angstrom)
 
 
-@pytest.mark.xfail(reason="The fluxdensity class is not implemented yet.")
 def test_wrong_unit_for_spectral_coordinate():
     with pytest.raises(u.UnitConversionError):
         FluxDensity(quantity=36.31 * u.Jy, spectral_coordinate=6187 * u.kg)
 
 
-@pytest.mark.xfail(reason="The fluxdensity class is not implemented yet.")
 def test_type_error_for_non_quantity_fd():
     with pytest.raises(TypeError):
         FluxDensity(quantity=3.631, spectral_coordinate=6187 * u.Angstrom)
 
 
-@pytest.mark.xfail(reason="The fluxdensity class is not implemented yet.")
 def test_type_error_for_non_quantity_spec_coord():
     with pytest.raises(TypeError):
         FluxDensity(quantity=3.631 * u.Jy, spectral_coordinate=6187)

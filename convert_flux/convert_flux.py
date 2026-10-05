@@ -27,6 +27,8 @@ Separate classes/functions for each type of calculation/conversion
 
 """
 
+import astropy.units as u
+
 
 def convert_flux():
     return
@@ -56,13 +58,25 @@ class Flux:
 
 class FluxDensity:
     """
-    1. Input validation
-    2. Convert to a stand unit
-    Nayera
+    Attributes:
+        Astropy Quantity (value + unit),
+        Spectral Coordinate (wavelength or frequency)
     """
 
-    def __init__(self, value, unit):
-        return
+    def __init__(self, quantity, spectral_coordinate):
+        # Input validation: check if inputs are astropy Quantities
+        if not isinstance(quantity, u.Quantity):
+            raise TypeError("quantity input must be an astropy Quantity")
+
+        if not isinstance(spectral_coordinate, u.Quantity):
+            raise TypeError("spectral_coordinate input must be an astropy Quantity")
+
+        self.spectral_coordinate = spectral_coordinate.to(
+            u.Angstrom, equivalencies=u.spectral()
+        )  # throws error if not equiv to wavelength/freq
+        self.quantity = quantity.to(
+            u.Jy, equivalencies=u.spectral_density(spectral_coordinate)
+        )
 
 
 class MagFluxDensity:
