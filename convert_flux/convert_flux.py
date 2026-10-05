@@ -44,8 +44,8 @@ class Mag:
 
     def __init__(self, quantity, spectral_coordinate):
         # Check if inputs are astropy quantities
-        if not isinstance(quantity, u.Magnitude):
-            raise TypeError("Input quantity must be astropy Magnitudes")
+        if not isinstance(quantity, u.Quantity):
+            raise TypeError("Input quantity must be astropy Quantities")
 
         if not isinstance(spectral_coordinate, u.Quantity):
             raise TypeError("Input spectraL_coordinate must be astropy Quantities")
