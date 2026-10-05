@@ -47,7 +47,7 @@ class Mag:
         if not isinstance(quantity, u.Magnitude):
             raise TypeError("Input quanity must be astropy Magnitudes")
 
-        if not isinstance(spectral_coordinate.u.Quantity):
+        if not isinstance(spectral_coordinate, u.Quantity):
             raise TypeError("Input spectraL_coordinate must be astropy Quantities")
 
         # Convert to standard photometric system (AB)
