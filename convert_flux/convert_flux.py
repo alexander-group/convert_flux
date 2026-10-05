@@ -45,14 +45,14 @@ class Mag:
     def __init__(self, quantity, spectral_coordinate):
         # Check if inputs are astropy quantities
         if not isinstance(quantity, u.Magnitude):
-            raise TypeError("Input quanity must be astropy Magnitudes")
+            raise TypeError("Input quantity must be astropy Magnitudes")
 
         if not isinstance(spectral_coordinate, u.Quantity):
             raise TypeError("Input spectraL_coordinate must be astropy Quantities")
 
         # Convert to standard photometric system (AB)
         # and standard spectral coordinate (AA)
-        self.quanity = quantity.to(
+        self.quantity = quantity.to(
             u.ABmag, equivalencies=u.spectral_density(spectral_coordinate)
         )
         self.spectral_coordinate = spectral_coordinate.to(
