@@ -47,6 +47,8 @@ class Mag:
 
 class Flux:
     """
+    A class that defines flux as an Astropy Quantity. Base units are in erg/s/cm^2.
+
     Attributes:
         Astropy Quantity (value + unit)
     """
@@ -55,13 +57,15 @@ class Flux:
         # Input validation: check if inputs are astropy quantities
         # Convert the quantity to the standard unit of flux (erg/s/cm^2)
         if not isinstance(quantity, u.Quantity):
-            raise TypeError("Quantity input must be an Astropy Quantity")
+            raise TypeError("Quantity input must be an Astropy Quantity.")
 
         self.quantity = quantity.to(u.erg / u.s / u.cm**2)
 
 
 class Luminosity:
     """
+    A class that defines luminosity as an Astropy Quantity. Base units are in erg/s.
+
     Attributes:
         Astropy Quantity (value + unit)
     """
@@ -70,7 +74,7 @@ class Luminosity:
         # Input validation: check if inputs are astropy quantities
         # Convert the quantity to the standard unit of luminosity (erg/s)
         if not isinstance(quantity, u.Quantity):
-            raise TypeError("Quantity input must be an Astropy Quantity")
+            raise TypeError("Quantity input must be an Astropy Quantity.")
 
         self.quantity = quantity.to(u.erg / u.s)
 
