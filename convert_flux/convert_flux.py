@@ -48,16 +48,31 @@ class Mag:
 class Flux:
     """
     Attributes:
-        Astropy Quantity (value + unit),
-        Source Spectrum (will be implemented)
+        Astropy Quantity (value + unit)
     """
 
-    def __init__(self, quantity, source_spectrum):
+    def __init__(self, quantity):
         # Input validation: check if inputs are astropy quantities
+        # Convert the quantity to the standard unit of flux (erg/s/cm^2)
         if not isinstance(quantity, u.Quantity):
             raise TypeError("Quantity input must be an Astropy Quantity")
 
         self.quantity = quantity.to(u.erg / u.s / u.cm**2)
+
+
+class Luminosity:
+    """
+    Attributes:
+        Astropy Quantity (value + unit)
+    """
+
+    def __init__(self, quantity):
+        # Input validation: check if inputs are astropy quantities
+        # Convert the quantity to the standard unit of luminosity (erg/s)
+        if not isinstance(quantity, u.Quantity):
+            raise TypeError("Quantity input must be an Astropy Quantity")
+
+        self.quantity = quantity.to(u.erg / u.s)
 
 
 class FluxDensity:
