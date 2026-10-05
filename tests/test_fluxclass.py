@@ -30,8 +30,8 @@ def test_flux_quantity_created_with_units():
 def test_flux_is_quantity():
     flux1 = Flux(quantity=3.22e-14 * (u.erg / u.s / u.cm**2))
     flux2 = Flux(quantity=4.08e-14 * (u.erg / u.s / u.cm**2))
-    assert isinstance(flux1, u.Quantity)
-    assert isinstance(flux2, u.Quantity)
+    assert isinstance(flux1.quantity, u.Quantity)
+    assert isinstance(flux2.quantity, u.Quantity)
 
 
 def test_wrong_unit_flux():
