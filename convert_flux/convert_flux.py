@@ -27,6 +27,9 @@ Separate classes/functions for each type of calculation/conversion
 
 """
 
+# Import packages here
+import astropy.units as u
+
 
 def convert_flux():
     return
@@ -34,13 +37,26 @@ def convert_flux():
 
 class Mag:
     """
-    1. Input validation
-    2. Convert to a stand unit
+    1. Input validation: Astropy quantity
+    2. Convert to a standard unit
     Thomas
     """
 
-    def __init__(self, value, unit):
-        return
+    def __init__(self, quantity, spectral_coordinate):
+        # Check if inputs are astropy quantities
+        if not isinstance(quantity, u.Magnitude):
+            raise TypeError("Input quanity must be astropy Magnitudes")
+
+        if not isinstance(spectral_coordinate.u.Quantity):
+            raise TypeError("Input spectraL_coordinate must be astropy Quantities")
+
+        # Convert to standard photometric system (chosen to be AB)
+        self.quanity = quantity.to(
+            u.ABmag, equivalencies=u.spectral_density(spectral_coordinate)
+        )
+        self.spectral_coordinate = spectral_coordinate.to(
+            u.Angstrom, equivalencies=u.spectral()
+        )
 
 
 class Flux:
