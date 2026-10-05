@@ -41,5 +41,5 @@ def test_abmag_to_flux_density():
 
     expected_flux_density = 3.631e-28 * (u.erg / (u.s * u.cm**3))
     assert (
-        abs(flux_density - expected_flux_density) <= 1e-6
+        abs(flux_density - expected_flux_density) <= 1e-31
     ), f"Expected {expected_flux_density}, but got {flux_density}"
