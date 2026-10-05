@@ -27,14 +27,14 @@ def test_luminosity_is_quantity():
     """
     luminosity1 = Luminosity(quantity=1.54e39 * (u.erg / u.s))
     luminosity2 = Luminosity(quantity=1.95e39 * (u.erg / u.s))
-    assert isinstance(luminosity1, u.Quantity)
-    assert isinstance(luminosity2, u.Quantity)
+    assert isinstance(luminosity1.quantity, u.Quantity)
+    assert isinstance(luminosity2.quantity, u.Quantity)
 
 
 def test_wrong_unit_luminosity():
     """
     Test that ensures a UnitConversionError is raised when an incorrect unit
-    is provided.
+    is provided by the user.
 
     Attributes:
         luminosity (Luminosity): Luminosity object with an incorrect unit.
@@ -46,7 +46,7 @@ def test_wrong_unit_luminosity():
 def test_type_error_for_non_quantity_luminosity():
     """
     Test that ensures a TypeError is raised when a non-Quantity value
-    is provided.
+    is provided by the user.
 
     Attributes:
         luminosity (Luminosity): Luminosity object with a non-Quantity value.
