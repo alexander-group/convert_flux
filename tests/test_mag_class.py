@@ -21,7 +21,7 @@ def test_mag_is_quantity():
 
 
 # Test if wrong units for magnitude can be detected
-def test_wrong_unit_flux_density():
+def test_wrong_unit_magnitude():
     with pytest.raises(u.UnitConversionError):
         Mag(quantity=17.0 * u.kg, spectral_coordinate=6187 * u.Angstrom)
 
@@ -30,3 +30,14 @@ def test_wrong_unit_flux_density():
 def test_wrong_unit_for_spectral_coordinate():
     with pytest.raises(u.UnitConversionError):
         Mag(quantity=17.0 * u.STmag, spectral_coordinate=6187 * u.kg)
+
+
+# Test if non-Astropy quantities can be detected
+def test_type_error_for_non_quantity_mag():
+    with pytest.raises(TypeError):
+        Mag(quantity=3.631, spectral_coordinate=6187 * u.Angstrom)
+
+
+def test_type_error_for_non_quantity_spec_coord():
+    with pytest.raises(TypeError):
+        Mag(quantity=3.631 * u.STmag, spectral_coordinate=6187)
