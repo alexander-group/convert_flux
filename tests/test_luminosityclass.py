@@ -19,7 +19,7 @@ def test_luminosity_quantity_created():
 
 def test_luminosity_is_quantity():
     """
-    Test that ensures luminosity objects are instances of astropy Quantity.
+    Test that ensures luminosity objects are created correctly with units.
 
     Attributes:
         luminosity1 (Luminosity): First luminosity object (from SDSS).
