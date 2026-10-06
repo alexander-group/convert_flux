@@ -17,7 +17,7 @@ def test_flux_quantity_created():
     assert isinstance(flux2, Flux)
 
 
-def test_flux_quantity_created_with_units():
+def test_flux_is_quantity():
     """
     Test that ensures flux objects are created correctly with units.
 
