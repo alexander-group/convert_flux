@@ -25,9 +25,6 @@ def test_flux_quantity_created_with_units():
         flux1 (Flux): First flux object (from SDSS).
         flux2 (Flux): Second flux object (from ZTF).
     """
-
-
-def test_flux_is_quantity():
     flux1 = Flux(quantity=3.22e-14 * (u.erg / u.s / u.cm**2))
     flux2 = Flux(quantity=4.08e-14 * (u.erg / u.s / u.cm**2))
     assert isinstance(flux1.quantity, u.Quantity)
