@@ -1,30 +1,6 @@
 """
 The main function of the package, a single function to convert fluxes,
 flux densities, and magnitudes
-
-Brainstorming:
-Inputs:
-astropy quantity (value + unit)
-wavelength, flux file (.dat, .txt, .csv)
-
-
-Output:
-astropy quantity (value + unit)
-
-Separate classes/functions for each type of calculation/conversion
-- input validation (check equivalency, convert to one standard unit that we decide on)
-- mag to flux density (class)
-    - functions for each type of magnitude (AB, Vega, ST) *just write for AB for now*
-- flux density to flux (class)
-    - function to read transmission curve file (NumPy array)
-    - function to do calculation
-- flux from/to luminosity (class)
-    - function for calculation
-- Mag (u.Unit)
-- Flux (u.Unit)
-- FluxDensity (u.Unit)
-
-
 """
 
 import astropy.units as u
@@ -54,8 +30,17 @@ class Flux:
     """
 
     def __init__(self, quantity):
-        # Input validation: check if inputs are astropy quantities
-        # Convert the quantity to the standard unit of flux (erg/s/cm^2)
+        """
+        Initialize function that defines the Flux object
+        with an Astropy Quantity.
+
+        Parameters:
+            quantity (u.Quantity): The flux quantity to be converted to standard
+            units in erg/s/cm^2.
+
+        Raises:
+            TypeError: If the input is not an Astropy Quantity.
+        """
         if not isinstance(quantity, u.Quantity):
             raise TypeError("Quantity input must be an Astropy Quantity.")
 
@@ -71,8 +56,17 @@ class Luminosity:
     """
 
     def __init__(self, quantity):
-        # Input validation: check if inputs are astropy quantities
-        # Convert the quantity to the standard unit of luminosity (erg/s)
+        """
+        Initialize function that defines the Luminosity object
+        with an Astropy Quantity.
+
+        Parameters:
+            quantity (u.Quantity): The luminosity quantity to be
+            converted to standard units in erg/s.
+
+        Raises:
+            TypeError: If the input is not an Astropy Quantity.
+        """
         if not isinstance(quantity, u.Quantity):
             raise TypeError("Quantity input must be an Astropy Quantity.")
 
