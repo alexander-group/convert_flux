@@ -1,30 +1,6 @@
 """
 The main function of the package, a single function to convert fluxes,
 flux densities, and magnitudes
-
-Brainstorming:
-Inputs:
-astropy quantity (value + unit)
-wavelength, flux file (.dat, .txt, .csv)
-
-
-Output:
-astropy quantity (value + unit)
-
-Separate classes/functions for each type of calculation/conversion
-- input validation (check equivalency, convert to one standard unit that we decide on)
-- mag to flux density (class)
-    - functions for each type of magnitude (AB, Vega, ST) *just write for AB for now*
-- flux density to flux (class)
-    - function to read transmission curve file (NumPy array)
-    - function to do calculation
-- flux from/to luminosity (class)
-    - function for calculation
-- Mag (u.Unit)
-- Flux (u.Unit)
-- FluxDensity (u.Unit)
-
-
 """
 
 import astropy.units as u
@@ -47,13 +23,54 @@ class Mag:
 
 class Flux:
     """
-    1. Input validation
-    2. Convert to a stand unit
-    Robin
+    A class that defines flux as an Astropy Quantity. Base units are in erg/s/cm^2.
+
+    Attributes:
+        Astropy Quantity (value + unit)
     """
 
-    def __init__(self, value, unit):
-        return
+    def __init__(self, quantity):
+        """
+        Initialize function that defines the Flux object
+        with an Astropy Quantity.
+
+        Parameters:
+            quantity (u.Quantity): The flux quantity to be converted to standard
+            units in erg/s/cm^2.
+
+        Raises:
+            TypeError: If the input is not an Astropy Quantity.
+        """
+        if not isinstance(quantity, u.Quantity):
+            raise TypeError("Quantity input must be an Astropy Quantity.")
+
+        self.quantity = quantity.to(u.erg / u.s / u.cm**2)
+
+
+class Luminosity:
+    """
+    A class that defines luminosity as an Astropy Quantity. Base units are in erg/s.
+
+    Attributes:
+        Astropy Quantity (value + unit)
+    """
+
+    def __init__(self, quantity):
+        """
+        Initialize function that defines the Luminosity object
+        with an Astropy Quantity.
+
+        Parameters:
+            quantity (u.Quantity): The luminosity quantity to be
+            converted to standard units in erg/s.
+
+        Raises:
+            TypeError: If the input is not an Astropy Quantity.
+        """
+        if not isinstance(quantity, u.Quantity):
+            raise TypeError("Quantity input must be an Astropy Quantity.")
+
+        self.quantity = quantity.to(u.erg / u.s)
 
 
 class FluxDensity:
