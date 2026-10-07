@@ -43,7 +43,11 @@ class Mag:
     """
 
     def __init__(self, quantity, spectral_coordinate):
-        # Check if inputs are astropy quantities
+        """
+        quantity:
+        """
+        # Look into LogUnit
+        # Check if input quantity are astropy quantities
         if not isinstance(quantity, u.Quantity):
             raise TypeError("Input quantity must be astropy Quantities")
 
@@ -58,6 +62,10 @@ class Mag:
         self.spectral_coordinate = spectral_coordinate.to(
             u.Angstrom, equivalencies=u.spectral()
         )
+
+
+test_quantity = 15 * u.STmag
+print(test_quantity.unit)
 
 
 class Flux:

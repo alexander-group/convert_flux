@@ -4,7 +4,7 @@ import astropy.units as u
 from convert_flux.convert_flux import Mag
 
 
-# Test if Magnitude quantity is created
+# Test if astropy quantity is created
 def test_mag_quantity_created():
     mag1 = Mag(quantity=17.0 * u.STmag, spectral_coordinate=5500 * u.Angstrom)
     mag2 = Mag(quantity=17.2 * u.STmag, spectral_coordinate=5750 * u.Angstrom)
