@@ -8,14 +8,23 @@ def convert_flux():
 
 class Mag:
     """
-    1. Input validation: Astropy quantity
-    2. Convert to a standard unit
-    Thomas
+    A class to be called on for calculations and conversions involving magnitudes
+    This class supports AB, ST, and Vega (to be worked on) magnitude system
+
+    Attributes:
+        quantity (astropy Quantity): Input magnitude(s)
+        spectral_coordinate (astropy Quantity): central wavelength(s) of the \
+            observing band
     """
 
     def __init__(self, quantity, spectral_coordinate):
         """
-        quantity:
+        Initialize the Mag class
+        Args:
+            quantity: input magnitudes
+            spectral_coordinate: input central wavelength
+        Raises:
+            TypeError: If either quantity or spectral_coordinate is not astropy Quantity
         """
         # Look into LogUnit
         # Check if input quantity are astropy quantities
