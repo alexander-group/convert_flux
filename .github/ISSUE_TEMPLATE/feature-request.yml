@@ -18,23 +18,36 @@ body:
     required: true
 
 - type: textarea
-  id: description
+  id: task
   attributes:
-    label: "Describe the Feature"
+    label: Task
     description: |
-      """
-      ## Task
       Describe in a few sentences what the task is. We need to [...] in order
       to [...].
-      ## Acceptance
+    placeholder: Describe the feature and the need it addresses.
+  validations:
+    required: true
+
+- type: textarea
+  id: acceptance
+  attributes:
+    label: Acceptance
+    description: |
       Describe what must exist in order for the task to be considered done:
       code changes, specific/nonstandard testing expectations, documentation,
       or a follow-on task.
-      ## Details
-      All the nitty-gritty details someone might need to know in order to get
-      started. Any helpful context or links, code snippets, line numbers, file
-      names.
-      """
+    placeholder: List the criteria that would make this feature complete.
+  validations:
+    required: true
+
+- type: textarea
+  id: details
+  attributes:
+    label: Details
+    description: |
+      Add any context that someone might need to get started, such as helpful
+      links, code snippets, line numbers, or file names.
+    placeholder: Add any other relevant context or implementation details.
 
 - type: markdown
   attributes:
