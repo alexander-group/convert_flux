@@ -1,8 +1,4 @@
-"""
-The main function of the package, a single function to convert fluxes,
-flux densities, and magnitudes
-"""
-
+# Import packages here
 import astropy.units as u
 
 
@@ -12,13 +8,40 @@ def convert_flux():
 
 class Mag:
     """
-    1. Input validation
-    2. Convert to a stand unit
-    Thomas
+    A class to be called on for calculations and conversions involving magnitudes
+    This class supports AB, ST, and Vega (to be worked on) magnitude system
+
+    Attributes:
+        quantity (astropy Quantity): Input magnitude(s)
+        spectral_coordinate (astropy Quantity): central wavelength(s) of the \
+            observing band
     """
 
-    def __init__(self, value, unit):
-        return
+    def __init__(self, quantity, spectral_coordinate):
+        """
+        Initialize the Mag class
+        Args:
+            quantity: input magnitudes
+            spectral_coordinate: input central wavelength
+        Raises:
+            TypeError: If either quantity or spectral_coordinate is not astropy Quantity
+        """
+        # Look into LogUnit
+        # Check if input quantity are astropy quantities
+        if not isinstance(quantity, u.Quantity):
+            raise TypeError("Input quantity must be astropy Quantities")
+
+        if not isinstance(spectral_coordinate, u.Quantity):
+            raise TypeError("Input spectraL_coordinate must be astropy Quantities")
+
+        # Convert to standard photometric system (AB)
+        # and standard spectral coordinate (AA)
+        self.quantity = quantity.to(
+            u.ABmag, equivalencies=u.spectral_density(spectral_coordinate)
+        )
+        self.spectral_coordinate = spectral_coordinate.to(
+            u.Angstrom, equivalencies=u.spectral()
+        )
 
 
 class Flux:
