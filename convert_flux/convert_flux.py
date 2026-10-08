@@ -117,7 +117,6 @@ class MagFluxDensity:
     """
     1. Conversion equations/calculation
 
-
     """
 
     def __init__(self, mag, flux_density):
@@ -129,6 +128,11 @@ class FluxFluxDensity:
     1. Conversion equations/calculation
     2. Transmission curve file reading function
     3. Call to Source spectrum class
+
+    Variables:
+    Flux, FluxDensity, SourceSpec, TransmissionCurve, ?
+    function flux_to_fluxdensity(Flux, SourceSpec, TransmissionCurve)
+    function flux_density_to_flux(FluxDensity, SourceSpec, TransmissionCurve)
 
     """
 
