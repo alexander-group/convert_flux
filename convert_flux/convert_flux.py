@@ -150,9 +150,6 @@ class MagFluxDensity:
 class FluxFluxDensity:
     """
     1. Conversion equations/calculation
-    2. Transmission curve file reading function
-    3. Call to Source spectrum class
-
     """
 
     def __init__(self, flux, flux_density):
@@ -161,10 +158,20 @@ class FluxFluxDensity:
 
 class FluxLuminosity:
     """
-    1. Conversion equations/calculation
+    A class that defines the conversion between flux and luminosity using the distance
+    to the source. Base units are in erg/s/cm^2 for flux and erg/s for luminosity. Unit
+    classes from Flux and Luminosity are used to ensure proper unit conversions.
+        1. Conversion equations/calculation
+        2. Convert to a stand unit
+
+        function flux_to_luminosity(flux, distance) that takes in a flux value and a
+        distance value and returns the corresponding luminosity value.
+        function luminosity_to_flux(luminosity, distance) that takes in a luminosity
+        value and a distance value and returns the corresponding flux value.
+
     """
 
-    def __init__(self, flux, luminosity):
+    def __init__(self, flux, luminosity, distance):
         return
 
 
