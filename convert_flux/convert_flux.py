@@ -1,5 +1,6 @@
 # Import packages here
 import astropy.units as u
+import numpy as np
 
 
 def convert_flux():
@@ -150,9 +151,6 @@ class MagFluxDensity:
 class FluxFluxDensity:
     """
     1. Conversion equations/calculation
-    2. Transmission curve file reading function
-    3. Call to Source spectrum class
-
     """
 
     def __init__(self, flux, flux_density):
@@ -161,11 +159,71 @@ class FluxFluxDensity:
 
 class FluxLuminosity:
     """
-    1. Conversion equations/calculation
+    A class that defines the conversion between flux and luminosity using the distance
+    to the source. Base units are in erg/s/cm^2 for flux and erg/s for luminosity. Unit
+    classes from Flux and Luminosity are used to ensure proper unit conversions. Input
+    validation for distance is conducted to ensure it is an astropy Quantity. If not, a
+    TypeError is raised. Then, the distance is converted to centimeters using the to()
+    method from astropy.units. The conversion equations are then applied to calculate
+    the corresponding luminosity or flux value.
+
+    Attributes:
+        flux (Flux): The flux value to be converted.
+        luminosity (Luminosity): The luminosity value to be converted.
+        distance (u.Quantity): The distance to the source in an Astropy Quantity.
     """
 
-    def __init__(self, flux, luminosity):
-        return
+    def flux_to_luminosity(self, flux, distance):
+        """
+        Convert flux to luminosity using the distance to the source.
+
+        Parameters:
+            flux (Flux): The flux value to be converted.
+            distance (u.Quantity): The distance to the source in an Astropy Quantity.
+
+        Returns:
+            luminosity: The corresponding luminosity value.
+        """
+        # Convert flux to Flux class if not already
+        if not isinstance(flux, Flux):
+            flux = Flux(flux)
+
+        # Convert distance to cm. TypeError is raised if distance is not an Astropy
+        # Quantity or if it is not a length quantity.
+        if not isinstance(distance, u.Quantity):
+            raise TypeError("distance must be an Astropy quantity.")
+        if not distance.unit.physical_type == "length":
+            raise TypeError("distance must be a length quantity.")
+        distance_cm = distance.to(u.cm)
+
+        luminosity_value = flux.quantity * 4 * np.pi * (distance_cm**2)
+        return Luminosity(luminosity_value)
+
+    def luminosity_to_flux(self, luminosity, distance):
+        """
+        Convert luminosity to flux using the distance to the source.
+
+        Parameters:
+            luminosity (Luminosity): The luminosity value to be converted.
+            distance (u.Quantity): The distance to the source in an Astropy Quantity.
+
+        Returns:
+            flux: The corresponding flux value.
+        """
+        # Convert luminosity to Luminosity class if not already
+        if not isinstance(luminosity, Luminosity):
+            luminosity = Luminosity(luminosity)
+
+        # Convert distance to cm. TypeError is raised if distance is not an Astropy
+        # Quantity or if it is not a length quantity.
+        if not isinstance(distance, u.Quantity):
+            raise TypeError("distance must be an Astropy quantity.")
+        if not distance.unit.physical_type == "length":
+            raise TypeError("distance must be a length quantity.")
+        distance_cm = distance.to(u.cm)
+
+        flux_value = luminosity.quantity / (4 * np.pi * (distance_cm**2))
+        return Flux(flux_value)
 
 
 class SourceSpec:
