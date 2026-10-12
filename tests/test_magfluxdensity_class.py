@@ -1,4 +1,5 @@
 # Import dependencies here
+import numpy as np
 import pytest
 import astropy.units as u
 from convert_flux.convert_flux import Mag, FluxDensity, MagFluxDensity
@@ -53,7 +54,7 @@ def test_fluxdensity_to_mag(central_wavelength):
     # Test if calculated value is within the tolerance of expected value
     expected_mag = 20 * u.ABmag
     assert (
-        abs(mag.quantity.value - expected_mag.value) / expected_mag.value <= 1e-3
+        np.abs(mag.quantity.value - expected_mag.value) / expected_mag.value <= 1e-3
     ), f"Expected {expected_mag}, but got {mag.quantity}"
 
 

@@ -36,7 +36,7 @@ class Mag:
             raise TypeError("Input spectraL_coordinate must be astropy Quantities")
 
         # Convert to standard photometric system (AB)
-        # and standard spectral coordinate (AA)
+        # and standard spectral coordinate (AA) if not already
         self.quantity = quantity.to(
             u.ABmag, equivalencies=u.spectral_density(spectral_coordinate)
         )
@@ -193,7 +193,7 @@ class MagFluxDensity:
         """
         flux_density_value = self.fd.quantity.value
         return Mag(
-            -2.5 * np.log10(flux_density_value / 3631.0) * u.ABmag, central_wavelength
+            -2.5 * np.log10(flux_density_value / 3631e6) * u.ABmag, central_wavelength
         )
 
 
