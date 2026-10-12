@@ -29,7 +29,6 @@ class Mag:
         Raises:
             TypeError: If either quantity or spectral_coordinate is not astropy Quantity
         """
-        # Look into LogUnit
         # Check if input quantity are astropy quantities
         if not isinstance(quantity, u.Quantity):
             raise TypeError("Input quantity must be astropy Quantities")
@@ -177,7 +176,7 @@ class MagFluxDensity:
         """
         This function converts from magnitude to flux density
         Args:
-            central_wavelength (astropy Quantity): central wavelength of the filter
+            central_wavelength (astropy Quantity): central wavelength/frequency
         Returns:
             Flux density as FluxDensity class
         """
@@ -195,7 +194,7 @@ class MagFluxDensity:
         """
         This function converts from flux density to magnitude
         Args:
-            central_wavelength (astropy Quantity): central wavelength
+            central_wavelength (astropy Quantity): central wavelength/frequency
         Returns:
             Magnitude as Mag class
         """
