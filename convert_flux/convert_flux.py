@@ -161,23 +161,18 @@ class FluxLuminosity:
     """
     A class that defines the conversion between flux and luminosity using the distance
     to the source. Base units are in erg/s/cm^2 for flux and erg/s for luminosity. Unit
-    classes from Flux and Luminosity are used to ensure proper unit conversions.
+    classes from Flux and Luminosity are used to ensure proper unit conversions. Input
+    validation for distance is conducted to ensure it is an astropy Quantity. If not, a
+    TypeError is raised. Then, the distance is converted to centimeters using the to()
+    method from astropy.units. The conversion equations are then applied to calculate
+    the corresponding luminosity or flux value.
+
     Attributes:
         flux (Flux): The flux value to be converted.
         luminosity (Luminosity): The luminosity value to be converted.
 
         1. Conversion equations/calculation
         2. Convert to a standard unit
-
-    function flux_to_luminosity(flux, distance) that takes in a flux value and a
-    distance value and returns the corresponding luminosity value.
-    function luminosity_to_flux(luminosity, distance) that takes in a luminosity
-    value and a distance value and returns the corresponding flux value.
-
-    Input validation for distance is conducted to ensure it is an astropy Quantity.
-    If not, a TypeError is raised. Then, the distance is converted to centimeters
-    using the to() method from astropy.units. The conversion equations are then
-    applied to calculate the corresponding luminosity or flux value.
     """
 
     def flux_to_luminosity(self, flux, distance):
@@ -194,6 +189,7 @@ class FluxLuminosity:
         if not isinstance(distance, u.Quantity):
             raise TypeError("distance must be an Astropy Quantity.")
 
+        # Convert flux to Flux class if not already
         if not isinstance(flux, Flux):
             flux = Flux(flux)
 
@@ -216,6 +212,7 @@ class FluxLuminosity:
         if not isinstance(distance, u.Quantity):
             raise TypeError("distance must be an Astropy Quantity.")
 
+        # Convert luminosity to Luminosity class if not already
         if not isinstance(luminosity, Luminosity):
             luminosity = Luminosity(luminosity)
 
