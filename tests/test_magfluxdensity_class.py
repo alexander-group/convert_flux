@@ -42,7 +42,7 @@ def test_mag_to_fluxdensity(central_wavelength):
 # Test the conversion from flux density to magnitude
 def test_fluxdensity_to_mag(central_wavelength):
     flux_density = FluxDensity(
-        quantity=3.631e-5 * u.Jy, spectral_coordinate=central_wavelength
+        quantity=36.315 * u.uJy, spectral_coordinate=central_wavelength
     )
     conversion = MagFluxDensity(flux_density=flux_density)
 

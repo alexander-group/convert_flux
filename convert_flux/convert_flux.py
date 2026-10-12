@@ -1,10 +1,12 @@
 # Import dependencies here
-import numpy as np
 import astropy.units as u
 
 
 def convert_flux():
     return
+
+
+# Set cosmology for the entire package (in the future)
 
 
 class Mag:
@@ -158,9 +160,9 @@ class MagFluxDensity:
         """
         # Convert magnitude to Mag class and flux density to Flux Density class
         # if not already
-        if mag is not None and not isinstance(mag, Mag):
+        if (mag is not None) and (not isinstance(mag, Mag)):
             mag = Mag(mag, central_wavelength)
-        if flux_density is not None and not isinstance(flux_density, FluxDensity):
+        if (flux_density is not None) and (not isinstance(flux_density, FluxDensity)):
             flux_density = FluxDensity(flux_density, central_wavelength)
 
         self.mag = mag
@@ -168,19 +170,25 @@ class MagFluxDensity:
 
         return
 
+    ## Change both to astropy Quantities
+
     # Define the function to convert from magnitude to flux density
     def mag_to_flux_density(self, central_wavelength):
         """
         This function converts from magnitude to flux density
         Args:
-            central_wavelength (astropy Quantity): central wavelength
+            central_wavelength (astropy Quantity): central wavelength of the filter
         Returns:
             Flux density as FluxDensity class
         """
-        return FluxDensity(
-            3631 * u.Jy * 10 ** (-0.4 * self.mag.quantity.value),
-            spectral_coordinate=central_wavelength,
+        # Use astropy conversion from magnitude to flux density
+        astropy_mag = self.mag.quantity
+        flux_density = astropy_mag.to(
+            u.uJy, equivalencies=u.spectral_density(central_wavelength)
         )
+
+        # Return output as FluxDensity class
+        return FluxDensity(flux_density, spectral_coordinate=central_wavelength)
 
     # Define the function convert from flux density to magnitude
     def flux_density_to_mag(self, central_wavelength):
@@ -191,10 +199,14 @@ class MagFluxDensity:
         Returns:
             Magnitude as Mag class
         """
-        flux_density_value = self.fd.quantity.value
-        return Mag(
-            -2.5 * np.log10(flux_density_value / 3631e6) * u.ABmag, central_wavelength
+        # Use astropy conversion from flux density to magnitude
+        astropy_flux_density = self.fd.quantity
+        mag = astropy_flux_density.to(
+            u.ABmag, equivalencies=u.spectral_density(central_wavelength)
         )
+
+        # Return output as Mag class
+        return Mag(mag, central_wavelength)
 
 
 class FluxFluxDensity:
@@ -225,3 +237,6 @@ class SourceSpec:
 
     def __init__(self, wavelength, flux):
         self.flux = 1
+
+
+# utils.py SourceSpec and TransmissionCurve classes
