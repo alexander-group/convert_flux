@@ -194,7 +194,7 @@ class FluxLuminosity:
         # Quantity or if it is not a length quantity.
         if not isinstance(distance, u.Quantity):
             raise TypeError("distance must be an Astropy quantity.")
-        if not distance.physical_type == "length":
+        if not distance.unit.physical_type == "length":
             raise TypeError("distance must be a length quantity.")
         distance_cm = distance.to(u.cm)
 
@@ -220,7 +220,7 @@ class FluxLuminosity:
         # Quantity or if it is not a length quantity.
         if not isinstance(distance, u.Quantity):
             raise TypeError("distance must be an Astropy quantity.")
-        if not distance.physical_type == "length":
+        if not distance.unit.physical_type == "length":
             raise TypeError("distance must be a length quantity.")
         distance_cm = distance.to(u.cm)
 
