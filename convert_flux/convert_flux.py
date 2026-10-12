@@ -172,8 +172,6 @@ class MagFluxDensity:
 
         return
 
-    ## Change both to astropy Quantities
-
     # Define the function to convert from magnitude to flux density
     def mag_to_flux_density(self, central_wavelength):
         """
