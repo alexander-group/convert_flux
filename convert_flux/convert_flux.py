@@ -1,4 +1,5 @@
-# Import packages here
+# Import dependencies here
+import numpy as np
 import astropy.units as u
 
 
@@ -138,13 +139,54 @@ class FluxDensity:
 
 class MagFluxDensity:
     """
-    1. Conversion equations/calculation
+    This class defines the conversion between Magnitude and Flux Density
+    Base units are AB magnitude for Mag and uJy for flux density
 
-
+    Attributes:
+        mag (astropy Quantity): magnitude
+        flux_density (astropy Quantity): flux density
     """
 
     def __init__(self, mag, flux_density):
+        """
+        Initialize the MagFluxDensity class
+        Args:
+            mag (astropy Quantity): Magnitude in AB system
+            flux_density (astropy Quantity): Flux density in uJy
+        """
+        # Convert magnitude to Mag class and flux density to Flux Density class
+        # if not already
+        if not isinstance(mag, Mag):
+            mag = Mag(mag)
+        if not isinstance(flux_density, FluxDensity):
+            flux_density = FluxDensity(flux_density)
+
+        self.mag = mag
+        self.fd = flux_density
+
         return
+
+    # Define the function to convert from magnitude to flux density
+    def mag_to_flux_density(self):
+        """
+        This function converts from magnitude to flux density
+        Args:
+            None
+        Returns:
+            Flux density as Flux Density class
+        """
+        return FluxDensity(3631 * 10 ** (-0.4 * self.mag))
+
+    # Define the function convert from flux density to magnitude
+    def flux_density_to_mag(self):
+        """
+        This function converts from flux density to magnitude
+        Args:
+            None
+        Returns:
+            Magnitude as Mag class
+        """
+        return Mag(-2.5 * np.log10(self.fd / 3631.0))
 
 
 class FluxFluxDensity:
