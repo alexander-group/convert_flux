@@ -170,9 +170,7 @@ class FluxLuminosity:
     Attributes:
         flux (Flux): The flux value to be converted.
         luminosity (Luminosity): The luminosity value to be converted.
-
-        1. Conversion equations/calculation
-        2. Convert to a standard unit
+        distance (u.Quantity): The distance to the source in an Astropy Quantity.
     """
 
     def flux_to_luminosity(self, flux, distance):
