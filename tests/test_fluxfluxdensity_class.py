@@ -19,9 +19,11 @@ from convert_flux.convert_flux import Flux, FluxDensity, FluxFluxDensity
 )
 def test_flux_density_to_flux(central_wavelength, filter_width, expected_flux):
     flux_density = FluxDensity(
-        quantity=3.631e-5 * u.Jy, spectral_coordinate=central_wavelength
+        quantity=3.631e-5 * u.Jy, convolved_info=(central_wavelength, filter_width)
     )
-    converter = FluxFluxDensity(flux=None, flux_density=flux_density)
+    converter = FluxFluxDensity(
+        flux=None, flux_density=flux_density, spectral_coordinate=central_wavelength
+    )
 
     flux = converter.flux_density_to_flux(filter_width=filter_width)
 

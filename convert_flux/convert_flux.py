@@ -148,10 +148,6 @@ class MagFluxDensity:
 
 class FluxFluxDensity:
     """
-    1. Conversion equations/calculation
-    2. Transmission curve file reading function
-    3. Call to Source spectrum class
-
     Variables:
     Flux, FluxDensity, SourceSpec, TransmissionCurve, ?
     function flux_to_fluxdensity(Flux, SourceSpec, TransmissionCurve)
@@ -165,8 +161,40 @@ class FluxFluxDensity:
     data, use scipy to integrate the transmission curve
     """
 
-    def __init__(self, flux, flux_density):
+    def __init__(self, flux=None, flux_density=None):
+        # assume we're getting a validated flux desnity in uJy or a flux  in erg/s/cm^2
+        self.flux = flux
+        self.fd = flux_density
         return
+
+    def flux_to_fluxdensity(self, convolved_info):
+        """
+        Convert flux to flux density using the provided convolved info from SourceSpec
+        and TransmissionCurve.
+        F_nu=F / delta_nu for tophat approximation
+
+        Parameters:
+            convolved_info (tuple): A tuple containing the convolved information from
+            SourceSpec and TransmissionCurve.
+
+        """
+        flux_density = self.flux.quantity / convolved_info[1]  # delta_nu
+        return FluxDensity(flux_density)
+
+    def flux_density_to_flux(self, convolved_info):
+        """
+        Convert flux density to flux using the provided convolved info from SourceSpec
+        and TransmissionCurve.
+        F=F_nu * delta_nu for tophat approximation
+
+        Parameters:
+            convolved_info (tuple): A tuple containing the convolved information from
+            SourceSpec and TransmissionCurve.
+
+        """
+
+        flux = self.fd.quantity * convolved_info[1]  # delta_nu
+        return Flux(flux)
 
 
 class FluxLuminosity:
