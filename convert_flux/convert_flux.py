@@ -156,7 +156,13 @@ class FluxFluxDensity:
     Flux, FluxDensity, SourceSpec, TransmissionCurve, ?
     function flux_to_fluxdensity(Flux, SourceSpec, TransmissionCurve)
     function flux_density_to_flux(FluxDensity, SourceSpec, TransmissionCurve)
-
+    define an astropy equivalency using the transmission curve
+    for now: use a transmission curve of
+    *if the source spectrum is flat, multiply the transmission data by 1, if it's not
+    (for ex, a lyman alpha break) then it won't be 1 and we want to be able to account
+    for that
+    use SourceSpec class as if it is already implemented to take in the source spec
+    data, use scipy to integrate the transmission curve
     """
 
     def __init__(self, flux, flux_density):
@@ -179,3 +185,12 @@ class SourceSpec:
 
     def __init__(self, wavelength, flux):
         self.flux = 1
+
+
+class TransmissionCurve:
+    """
+    Future implementation for transmission curve
+    """
+
+    def __init__(self, wavelength, transmission):
+        self.transmission = 1
