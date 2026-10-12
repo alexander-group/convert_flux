@@ -55,7 +55,3 @@ def test_fluxdensity_to_mag(central_wavelength):
     assert (
         mag.quantity - expected_mag <= 1e-3
     ), f"Expected {expected_mag}, but got {mag.quantity}"
-
-
-# test = 20 * u.ABmag
-# print(test.unit)
