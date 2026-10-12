@@ -7,6 +7,9 @@ def convert_flux():
 
 
 # Set cosmology for the entire package (in the future)
+# Write convert_flux function
+# Implemenent Vega
+# Integrate convert_flux with transmission curve package (Slack Noah before doing)
 
 
 class Mag:
