@@ -186,15 +186,18 @@ class FluxLuminosity:
         Returns:
             luminosity: The corresponding luminosity value.
         """
-        if not isinstance(distance, u.Quantity):
-            raise TypeError("distance must be an Astropy Quantity.")
-
         # Convert flux to Flux class if not already
         if not isinstance(flux, Flux):
             flux = Flux(flux)
 
-        # Convert distance to cm
+        # Convert distance to cm. TypeError is raised if distance is not an Astropy
+        # Quantity or if it is not a length quantity.
+        if not isinstance(distance, u.Quantity):
+            raise TypeError("distance must be an Astropy quantity.")
+        if not distance.physical_type == "length":
+            raise TypeError("distance must be a length quantity.")
         distance_cm = distance.to(u.cm)
+
         luminosity_value = flux.quantity * 4 * np.pi * (distance_cm**2)
         return Luminosity(luminosity_value)
 
@@ -209,15 +212,18 @@ class FluxLuminosity:
         Returns:
             flux: The corresponding flux value.
         """
-        if not isinstance(distance, u.Quantity):
-            raise TypeError("distance must be an Astropy Quantity.")
-
         # Convert luminosity to Luminosity class if not already
         if not isinstance(luminosity, Luminosity):
             luminosity = Luminosity(luminosity)
 
-        # Convert distance to cm
+        # Convert distance to cm. TypeError is raised if distance is not an Astropy
+        # Quantity or if it is not a length quantity.
+        if not isinstance(distance, u.Quantity):
+            raise TypeError("distance must be an Astropy quantity.")
+        if not distance.physical_type == "length":
+            raise TypeError("distance must be a length quantity.")
         distance_cm = distance.to(u.cm)
+
         flux_value = luminosity.quantity / (4 * np.pi * (distance_cm**2))
         return Flux(flux_value)
 
