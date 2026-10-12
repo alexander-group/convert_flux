@@ -35,4 +35,4 @@ def test_luminosity_to_flux_conversion(luminosity, distance, expected_flux):
     flux = flux_luminosity.luminosity_to_flux(luminosity, distance)
 
     assert isinstance(flux, Flux)
-    assert abs(flux.quantity - expected_flux) < 5e39 * (u.erg / u.s / u.cm**2)
+    assert abs(flux.quantity - expected_flux) < 1e-16 * (u.erg / u.s / u.cm**2)
