@@ -151,8 +151,8 @@ class MagFluxDensity:
         """
         Initialize the MagFluxDensity class
         Args:
-            mag (astropy Quantity): Magnitude in AB system
-            flux_density (astropy Quantity): Flux density in uJy
+            mag (Mag class or astropy Quantity): Magnitude in AB system
+            flux_density (Flux Density class or astropy Quantity): Flux density in uJy
         """
         # Convert magnitude to Mag class and flux density to Flux Density class
         # if not already
