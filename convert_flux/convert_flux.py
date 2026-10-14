@@ -15,38 +15,47 @@ def convert_flux():
 class Mag:
     """
     A class to be called on for calculations and conversions involving magnitudes
-    This class supports AB, ST, and Vega (to be worked on) magnitude system
+    This class supports AB, ST, and Vega magnitude systems.
 
     Attributes:
         quantity (astropy Quantity): Input magnitude(s)
         spectral_coordinate (astropy Quantity): central wavelength(s) of the \
-            observing band
+            observing band. Automatically converts to Angstrom
+        chosen_mag_system (astropy Units): Specify which magnitude system to convert to.
+            Default is AB.
     """
 
-    def __init__(self, quantity, spectral_coordinate):
+    def __init__(self, quantity, spectral_coordinate, chosen_mag_system=None):
         """
         Initialize the Mag class
         Args:
             quantity: input magnitudes
             spectral_coordinate: input central wavelength
+            chosen_mag_system: magnitude system to convert to.
         Raises:
             TypeError: If either quantity or spectral_coordinate is not astropy Quantity
         """
         # Check if input quantity are astropy quantities
         if not isinstance(quantity, u.Quantity):
-            raise TypeError("Input quantity must be astropy Quantities")
+            raise TypeError("Input quantity must be astropy Quantity")
 
         if not isinstance(spectral_coordinate, u.Quantity):
-            raise TypeError("Input spectraL_coordinate must be astropy Quantities")
+            raise TypeError("Input spectraL_coordinate must be astropy Quantity")
 
-        # Convert to standard photometric system (AB)
-        # and standard spectral coordinate (AA) if not already
-        self.quantity = quantity.to(
-            u.ABmag, equivalencies=u.spectral_density(spectral_coordinate)
-        )
+        # Convert spectral coordinate into AA
         self.spectral_coordinate = spectral_coordinate.to(
             u.Angstrom, equivalencies=u.spectral()
         )
+
+        # Convert to AB magnitude system by default or user-specified system
+        if chosen_mag_system is not None:
+            self.quantity = quantity.to(
+                chosen_mag_system, equivalencies=u.spectral_density(spectral_coordinate)
+            )
+        else:
+            self.quantity = quantity.to(
+                u.ABmag, equivalencies=u.spectral_density(spectral_coordinate)
+            )
 
 
 class Flux:
