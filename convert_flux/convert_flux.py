@@ -19,9 +19,9 @@ class Mag:
 
     Attributes:
         quantity (astropy Quantity): Input magnitude(s)
-        spectral_coordinate (astropy Quantity): central wavelength(s) of the \
+        spectral_coordinate (astropy Quantity): central wavelength(s) of the
             observing band. Automatically converts to Angstrom
-        chosen_mag_system (astropy Units): Specify which magnitude system to convert to.
+        chosen_mag_system (astropy Units): Magnitude system to convert to.
             Default is AB.
     """
 
@@ -40,9 +40,9 @@ class Mag:
             raise TypeError("Input quantity must be astropy Quantity")
 
         if not isinstance(spectral_coordinate, u.Quantity):
-            raise TypeError("Input spectraL_coordinate must be astropy Quantity")
+            raise TypeError("Input spectral_coordinate must be astropy Quantity")
 
-        # Convert spectral coordinate into AA
+        # Convert spectral coordinate into Angstrom
         self.spectral_coordinate = spectral_coordinate.to(
             u.Angstrom, equivalencies=u.spectral()
         )
