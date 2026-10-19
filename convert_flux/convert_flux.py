@@ -244,8 +244,6 @@ class FluxLuminosity:
         return
 
 
-# abstract sourcespec class
-# subclass for flat source spec- numpy.ones(length of transmission curve)
 class SourceSpec:
     """
     Future implementation for non-flat spectrum
@@ -267,28 +265,3 @@ class TransmissionCurve:
     def __init__(self, wavelength, transmission):
         # will be an array eventually
         self.transmission = 1
-
-
-def convolve_source_transmission(source_spec, transmission_curve):
-    """
-    Convolve the source spectrum with the transmission curve.
-
-    Parameters:
-        source_spec: The source spectrum array from SourceSpec.
-        transmission_curve: The transmission curve array from TransmissionCurve.
-
-    Returns:
-        The convolved output of the source spectrum and transmission curve.
-    """
-    if np.size(source_spec) != np.size(transmission_curve):
-        raise TypeError(
-            "Source spectrum and transmission curve must have the same size"
-        )
-
-    convolved_output = source_spec * transmission_curve
-    return convolved_output
-
-
-# utility class/file for handling convolution of source spect and transmission curve
-# move sourcespec/transmissioncurve class to utility file as well
-# start thinking about separating to different files
