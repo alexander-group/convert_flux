@@ -3,12 +3,6 @@ import pytest
 import astropy.units as u
 from convert_flux.convert_flux import Mag
 
-# Import
-# Re
-# Define Vega magnitude system
-_u_vega = u.def_unit("VEGA")
-VEGAMAG = u.mag(_u_vega)
-
 
 # Test if astropy quantity is created
 def test_mag_quantity_created():
