@@ -30,13 +30,13 @@ class Mag:
         Raises:
             TypeError: If either quantity or spectral_coordinate is not astropy Quantity
         """
-        # Check if input magnitudes are in AB, ST, or Vega magnitude system
+        # Check if input magnitudes are astropy Quantities
         if not isinstance(quantity, u.Quantity):
             raise TypeError("Input magnitude must be astropy Quantity")
+        # Check if input magnitudes are in AB, ST, or Vega magnitude system
         if quantity.unit not in (u.ABmag, u.STmag, convert_flux_units.VEGAMAG):
             raise u.UnitConversionError(
-                "Input magnitude must be in AB, \
-                ST, or Vega system"
+                "Input magnitude must be in AB, ST, or Vega system"
             )
 
         # Check if input spectral coordinates are astropy quantities
