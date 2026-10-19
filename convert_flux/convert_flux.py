@@ -1,6 +1,10 @@
 # Import dependencies here
 import astropy.units as u
 
+# Start working on Vega magnitude (following ideas from Sympy)
+_u_vega = u.def_unit("VEGA")
+VEGAMAG = u.mag(_u_vega)
+
 
 def convert_flux():
     return
@@ -41,11 +45,6 @@ class Mag:
 
         if not isinstance(spectral_coordinate, u.Quantity):
             raise TypeError("Input spectral_coordinate must be astropy Quantity")
-
-        # Convert spectral coordinate into Angstrom
-        self.spectral_coordinate = spectral_coordinate.to(
-            u.Angstrom, equivalencies=u.spectral()
-        )
 
         # Convert to AB magnitude system by default or user-specified system
         if chosen_mag_system is not None:
@@ -182,40 +181,40 @@ class MagFluxDensity:
         return
 
     # Define the function to convert from magnitude to flux density
-    def mag_to_flux_density(self, central_wavelength):
+    def mag_to_flux_density(self, spectral_coordinate):
         """
         This function converts from magnitude to flux density
         Args:
-            central_wavelength (astropy Quantity): central wavelength/frequency
+            spectral_coordinate (astropy Quantity): central wavelength/frequency
         Returns:
             Flux density as FluxDensity class
         """
         # Use astropy conversion from magnitude to flux density
         astropy_mag = self.mag.quantity
         flux_density = astropy_mag.to(
-            u.uJy, equivalencies=u.spectral_density(central_wavelength)
+            u.uJy, equivalencies=u.spectral_density(spectral_coordinate)
         )
 
         # Return output as FluxDensity class
-        return FluxDensity(flux_density, spectral_coordinate=central_wavelength)
+        return FluxDensity(flux_density, spectral_coordinate=spectral_coordinate)
 
     # Define the function convert from flux density to magnitude
-    def flux_density_to_mag(self, central_wavelength):
+    def flux_density_to_mag(self, spectral_coordinate):
         """
         This function converts from flux density to magnitude
         Args:
-            central_wavelength (astropy Quantity): central wavelength/frequency
+            spectral_coordinate (astropy Quantity): central wavelength/frequency
         Returns:
-            Magnitude as Mag class
+            AB Magnitude as Mag class
         """
         # Use astropy conversion from flux density to magnitude
         astropy_flux_density = self.fd.quantity
         mag = astropy_flux_density.to(
-            u.ABmag, equivalencies=u.spectral_density(central_wavelength)
+            u.ABmag, equivalencies=u.spectral_density(spectral_coordinate)
         )
 
         # Return output as Mag class
-        return Mag(mag, central_wavelength)
+        return Mag(mag, spectral_coordinate)
 
 
 class FluxFluxDensity:
