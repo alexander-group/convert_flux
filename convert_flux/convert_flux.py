@@ -1,7 +1,7 @@
 # Import dependencies here
 import astropy.units as u
 
-# Start working on Vega magnitude (following ideas from Sympy)
+# Start working on Vega magnitude (following ideas from sympy)
 _u_vega = u.def_unit("VEGA")
 VEGAMAG = u.mag(_u_vega)
 
@@ -10,23 +10,17 @@ def convert_flux():
     return
 
 
-# Set cosmology for the entire package (in the future)
-# Write convert_flux function
-# Implemenent Vega
-# Integrate convert_flux with transmission curve package (Slack Noah before doing)
-
-
 class Mag:
     """
     A class to be called on for calculations and conversions involving magnitudes
     This class supports AB, ST, and Vega magnitude systems.
 
     Attributes:
-        quantity (astropy Quantity): Input magnitude(s)
+        quantity (ABmag/STmag/VEGAmag): Input magnitude(s)
         spectral_coordinate (astropy Quantity): central wavelength(s) of the
             observing band. Automatically converts to Angstrom
         chosen_mag_system (astropy Units): Magnitude system to convert to.
-            Default is AB.
+            Default is ABmag.
     """
 
     def __init__(self, quantity, spectral_coordinate, chosen_mag_system=None):
@@ -39,10 +33,13 @@ class Mag:
         Raises:
             TypeError: If either quantity or spectral_coordinate is not astropy Quantity
         """
-        # Check if input quantity are astropy quantities
+        # Check if input magnitudes are in AB, ST, or Vega magnitude system
         if not isinstance(quantity, u.Quantity):
-            raise TypeError("Input quantity must be astropy Quantity")
+            raise TypeError("Input magnitude must be astropy Quantity")
+        if not isinstance(quantity, (u.ABmag, u.STmag, u.VEGAmag)):
+            raise TypeError("Input magnitude must be in AB, ST, or Vega system")
 
+        # Check if input spectral coordinates are astropy quantities
         if not isinstance(spectral_coordinate, u.Quantity):
             raise TypeError("Input spectral_coordinate must be astropy Quantity")
 
