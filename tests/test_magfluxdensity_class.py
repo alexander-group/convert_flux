@@ -5,7 +5,7 @@ from convert_flux.convert_flux import Mag, FluxDensity, MagFluxDensity
 
 
 @pytest.mark.parametrize(
-    "central_wavelength",
+    "spectral_coordinate",
     [
         (6187 * u.Angstrom),
         (6436 * u.Angstrom),
@@ -34,7 +34,7 @@ def test_mag_to_fluxdensity(spectral_coordinate):
 
 
 @pytest.mark.parametrize(
-    "central_wavelength",
+    "spectral_coordinate",
     [
         (6187 * u.Angstrom),
         (6436 * u.Angstrom),

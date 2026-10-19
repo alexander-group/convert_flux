@@ -1,9 +1,6 @@
 # Import dependencies here
 import astropy.units as u
-
-# Start working on Vega magnitude (following ideas from sympy)
-_u_vega = u.def_unit("VEGA")
-VEGAMAG = u.mag(_u_vega)
+from convert_flux import convert_flux_units
 
 
 def convert_flux():
@@ -36,12 +33,17 @@ class Mag:
         # Check if input magnitudes are in AB, ST, or Vega magnitude system
         if not isinstance(quantity, u.Quantity):
             raise TypeError("Input magnitude must be astropy Quantity")
-        if not isinstance(quantity, (u.ABmag, u.STmag, u.VEGAmag)):
-            raise TypeError("Input magnitude must be in AB, ST, or Vega system")
+        if quantity.unit not in (u.ABmag, u.STmag, convert_flux_units.VEGAMAG):
+            raise u.UnitConversionError(
+                "Input magnitude must be in AB, \
+                ST, or Vega system"
+            )
 
         # Check if input spectral coordinates are astropy quantities
         if not isinstance(spectral_coordinate, u.Quantity):
             raise TypeError("Input spectral_coordinate must be astropy Quantity")
+
+        # Include Spectrum from Vega. Define separate equivalencies for Vega
 
         # Convert to AB magnitude system by default or user-specified system
         if chosen_mag_system is not None:
