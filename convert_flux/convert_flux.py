@@ -163,8 +163,7 @@ class FluxLuminosity:
     to the source. Base units are in erg/s/cm^2 for flux and erg/s for luminosity. Unit
     classes from Flux and Luminosity are used to ensure proper unit conversions. Input
     validation for distance is conducted to ensure it is an astropy Quantity. If not, a
-    TypeError is raised. Then, the distance is converted to centimeters using the to()
-    method from astropy.units. The conversion equations are then applied to calculate
+    TypeError is raised. The conversion equations are then applied to calculate
     the corresponding luminosity or flux value.
 
     Attributes:
