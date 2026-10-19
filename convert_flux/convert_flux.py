@@ -1,5 +1,7 @@
 # Import packages here
 import astropy.units as u
+import numpy as np
+from scipy.integrate import trapezoid
 
 
 def convert_flux():
@@ -100,7 +102,7 @@ class FluxDensity:
     """
     A class that defines flux density as an Astropy Quantity and converts
     between wavelength based flux density and frequency based flux density using
-    the spectral equivalencies. Base units are in uJy.
+    the spectral equivalencies. Base units are in erg / (s cm^2 Angstrom).
     Attributes:
         Astropy Quantity (value + unit),
         Spectral Coordinate (wavelength or frequency)
@@ -113,7 +115,7 @@ class FluxDensity:
 
         Parameters:
             quantity (u.Quantity): The flux desnity quantity to be converted to standard
-            units uJy. Must have units of flux density.
+            units erg / (s cm^2 Angstrom). Must have units of flux density.
             spectral_coordinate (u.Quantity): represents the wavelength or frequency
             where the flux density is measured. Must have units of wavelength or
             frequency.
@@ -132,7 +134,8 @@ class FluxDensity:
             u.Angstrom, equivalencies=u.spectral()
         )  # throws error if not equiv to wavelength/freq
         self.quantity = quantity.to(
-            u.uJy, equivalencies=u.spectral_density(spectral_coordinate)
+            u.erg / (u.s * u.cm**2 * u.Angstrom),
+            equivalencies=u.spectral_density(spectral_coordinate),
         )
 
 
@@ -148,53 +151,88 @@ class MagFluxDensity:
 
 class FluxFluxDensity:
     """
-    Variables:
-    Flux, FluxDensity, SourceSpec, TransmissionCurve, ?
-    function flux_to_fluxdensity(Flux, SourceSpec, TransmissionCurve)
-    function flux_density_to_flux(FluxDensity, SourceSpec, TransmissionCurve)
-    define an astropy equivalency using the transmission curve
-    for now: use a transmission curve of
-    *if the source spectrum is flat, multiply the transmission data by 1, if it's not
-    (for ex, a lyman alpha break) then it won't be 1 and we want to be able to account
-    for that
-    use SourceSpec class as if it is already implemented to take in the source spec
-    data, use scipy to integrate the transmission curve
+    A class that defines the conversion between flux and flux density using the provided
+    source spectrum and transmission curve data. Flux is assumed to be in units of
+    erg/s/cm^2 and flux density is assumed to be in units of erg / (s cm^2 Angstrom).
+    Currently, the conversions support a flat source spectrum and a top hat
+    approximation for the transmission curve. Future implementation will include support
+    for Lyman alpha break and power law source spectra, as well as real tranmission
+    curve data using the associated package.
+
+    Attributes:
+        flux (Flux): The total flux in units of erg/s/cm^2.
+        flux_density (FluxDensity): The flux density in units of erg / (s cm^2 Angstrom)
     """
 
     def __init__(self, flux=None, flux_density=None):
-        # assume we're getting a validated flux desnity in uJy or a flux  in erg/s/cm^2
+        # assume we're getting a validated flux density in erg / (s cm^2 Angstrom) or a
+        # flux in erg/s/cm^2
+        if flux is not None and not isinstance(flux, Flux):
+            raise TypeError("flux must be a Flux object")
+
+        if flux_density is not None and not isinstance(flux_density, FluxDensity):
+            raise TypeError("flux_density must be a FluxDensity object")
+
         self.flux = flux
         self.fd = flux_density
-        return
 
-    def flux_to_fluxdensity(self, convolved_info):
+    def flux_to_fluxdensity(self, transmission, wavelength, source_spec_shape=None):
         """
-        Convert flux to flux density using the provided convolved info from SourceSpec
-        and TransmissionCurve.
-        F_nu=F / delta_nu for tophat approximation
+        Convert Flux to FluxDensity object using the provided source spectrum and
+        transmission curve.
 
         Parameters:
-            convolved_info (tuple): A tuple containing the convolved information from
-            SourceSpec and TransmissionCurve.
+            transmission: The transmission array from TransmissionCurve (dimensionless).
+            wavelength: The wavelength array corresponding to the overlapping ranges of
+            source_flux and transmission (in Angstrom).
 
         """
-        flux_density = self.flux.quantity / convolved_info[1]  # delta_nu
-        return FluxDensity(flux_density)
+        if isinstance(transmission, np.ndarray):
+            if np.size(wavelength) != np.size(transmission):
+                raise TypeError("Wavelength and transmission must have the same size")
+        else:
+            transmission = np.array(transmission)
 
-    def flux_density_to_flux(self, convolved_info):
+        weighted_tranmission = (
+            transmission * source_spec_shape
+            if source_spec_shape is not None
+            else transmission
+        )
+
+        delta_nu = trapezoid(weighted_tranmission, wavelength)  # (bandwidth)
+
+        flux_density = self.flux.quantity / delta_nu
+
+        ref_wavelength = (wavelength.min() + wavelength.max()) / 2
+        return FluxDensity(flux_density, ref_wavelength)
+
+    def flux_density_to_flux(self, transmission, wavelength, source_spec_shape=None):
         """
-        Convert flux density to flux using the provided convolved info from SourceSpec
+        Convert FluxDensity to Flux object using the provided arrays from SourceSpec
         and TransmissionCurve.
-        F=F_nu * delta_nu for tophat approximation
 
         Parameters:
-            convolved_info (tuple): A tuple containing the convolved information from
-            SourceSpec and TransmissionCurve.
+            source_flux_density: The source flux density array from SourceSpec.
+            transmission: The transmission array from TransmissionCurve.
+            wavelength: The wavelength array corresponding to the overlapping ranges of
+            source_flux_density and transmission.
 
         """
+        if isinstance(transmission, np.ndarray):
+            if np.size(wavelength) != np.size(transmission):
+                raise TypeError("wavelength and transmission must have the same size")
+        else:
+            transmission = np.array(transmission)
 
-        flux = self.fd.quantity * convolved_info[1]  # delta_nu
-        return Flux(flux)
+        weighted_transmission = (
+            transmission * source_spec_shape
+            if source_spec_shape is not None
+            else transmission
+        )
+        transmitted_flux = self.fd.quantity * weighted_transmission
+
+        total_flux = trapezoid(transmitted_flux, wavelength)
+        return Flux(total_flux)
 
 
 class FluxLuminosity:
@@ -206,19 +244,51 @@ class FluxLuminosity:
         return
 
 
+# abstract sourcespec class
+# subclass for flat source spec- numpy.ones(length of transmission curve)
 class SourceSpec:
     """
     Future implementation for non-flat spectrum
+    Possibly define just the shape of the source spectrum normalized rather than the
+    full array of flux values.
     """
 
-    def __init__(self, wavelength, flux):
-        self.flux = 1
+    def __init__(self):
+        self.flux = np.ones(1)
 
 
 class TransmissionCurve:
     """
     Future implementation for transmission curve
+    In wavelength space
+    will interact with the other package Noah wrote
     """
 
     def __init__(self, wavelength, transmission):
+        # will be an array eventually
         self.transmission = 1
+
+
+def convolve_source_transmission(source_spec, transmission_curve):
+    """
+    Convolve the source spectrum with the transmission curve.
+
+    Parameters:
+        source_spec: The source spectrum array from SourceSpec.
+        transmission_curve: The transmission curve array from TransmissionCurve.
+
+    Returns:
+        The convolved output of the source spectrum and transmission curve.
+    """
+    if np.size(source_spec) != np.size(transmission_curve):
+        raise TypeError(
+            "Source spectrum and transmission curve must have the same size"
+        )
+
+    convolved_output = source_spec * transmission_curve
+    return convolved_output
+
+
+# utility class/file for handling convolution of source spect and transmission curve
+# move sourcespec/transmissioncurve class to utility file as well
+# start thinking about separating to different files
