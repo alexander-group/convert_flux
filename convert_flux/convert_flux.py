@@ -14,8 +14,7 @@ class Mag:
 
     Attributes:
         quantity (ABmag/STmag/VEGAmag): Input magnitude(s)
-        spectral_coordinate (astropy Quantity): central wavelength(s) of the
-            observing band. Automatically converts to Angstrom
+        spectral_coordinate (astropy Quantity): central wavelength/frequency
         chosen_mag_system (astropy Units): Magnitude system to convert to.
             Default is ABmag.
     """
@@ -33,6 +32,7 @@ class Mag:
         # Check if input magnitudes are astropy Quantities
         if not isinstance(quantity, u.Quantity):
             raise TypeError("Input magnitude must be astropy Quantity")
+
         # Check if input magnitudes are in AB, ST, or Vega magnitude system
         if quantity.unit not in (u.ABmag, u.STmag, convert_flux_units.VEGAMAG):
             raise u.UnitConversionError(
@@ -43,17 +43,23 @@ class Mag:
         if not isinstance(spectral_coordinate, u.Quantity):
             raise TypeError("Input spectral_coordinate must be astropy Quantity")
 
-        # Include Spectrum from Vega. Define separate equivalencies for Vega
+        # Include Spectrum from Vega and define separate equivalencies for Vega
+        if quantity.unit == convert_flux_units.VEGAMAG:
+            ## Do something once we have SourceSpectrum class ready
+            return
 
-        # Convert to AB magnitude system by default or user-specified system
-        if chosen_mag_system is not None:
-            self.quantity = quantity.to(
-                chosen_mag_system, equivalencies=u.spectral_density(spectral_coordinate)
-            )
+        # Convert from non-Vega magnitude to AB magnitude by default
+        # or user-specified system
         else:
-            self.quantity = quantity.to(
-                u.ABmag, equivalencies=u.spectral_density(spectral_coordinate)
-            )
+            if chosen_mag_system is not None:
+                self.quantity = quantity.to(
+                    chosen_mag_system,
+                    equivalencies=u.spectral_density(spectral_coordinate),
+                )
+            else:
+                self.quantity = quantity.to(
+                    u.ABmag, equivalencies=u.spectral_density(spectral_coordinate)
+                )
 
 
 class Flux:
@@ -159,7 +165,7 @@ class MagFluxDensity:
         flux_density (astropy Quantity): flux density
     """
 
-    def __init__(self, mag=None, flux_density=None, central_wavelength=None):
+    def __init__(self, mag=None, flux_density=None, spectral_coordinate=None):
         """
         Initialize the MagFluxDensity class
         Args:
@@ -170,9 +176,9 @@ class MagFluxDensity:
         # Convert magnitude to Mag class and flux density to Flux Density class
         # if not already
         if (mag is not None) and (not isinstance(mag, Mag)):
-            mag = Mag(mag, central_wavelength)
+            mag = Mag(mag, spectral_coordinate)
         if (flux_density is not None) and (not isinstance(flux_density, FluxDensity)):
-            flux_density = FluxDensity(flux_density, central_wavelength)
+            flux_density = FluxDensity(flux_density, spectral_coordinate)
 
         self.mag = mag
         self.fd = flux_density
