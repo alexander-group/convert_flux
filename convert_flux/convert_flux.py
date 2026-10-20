@@ -176,7 +176,7 @@ class FluxLuminosity:
        luminosity distance when a redshift is given.
     """
 
-    def __init__(self, flux=None, luminosity=None, cosmo=None):
+    def __init__(self, flux=None, luminosity=None, cosmo=Planck18):
         """
         Initialize the FluxLuminosity class with desired flux/luminosity quantity to
         convert and cosmology.
@@ -198,10 +198,7 @@ class FluxLuminosity:
         self.flux = flux
         self.luminosity = luminosity
 
-        if cosmo is None:
-            # default cosmology is Planck18
-            cosmo = Planck18
-        elif not isinstance(cosmo, Cosmology):
+        if not isinstance(cosmo, Cosmology):
             raise TypeError("cosmo must be an instance of astropy.cosmology.Cosmology")
         self.cosmo = cosmo
 
