@@ -44,10 +44,10 @@ class Mag:
             raise TypeError("Input spectral_coordinate must be astropy Quantity")
 
         # Define separate equivalencies if user wants to convert from/to Vega mag
-        if quantity.unit == convert_flux_units.VEGAMAG:
+        if isinstance(quantity.unit, convert_flux_units.VEGAMAG):
             ## Do something once we have SourceSpectrum class ready
             return
-        elif chosen_mag_system == convert_flux_units.VEGAMAG:
+        elif isinstance(chosen_mag_system, convert_flux_units.VEGAMAG):
             ## Do something once we have SourceSpectrum class ready
             return
 
