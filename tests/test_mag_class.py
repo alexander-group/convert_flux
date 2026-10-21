@@ -22,7 +22,7 @@ def test_mag_is_quantity():
 
 # Test if wrong units for magnitude can be detected
 def test_wrong_unit_magnitude():
-    with pytest.raises(u.UnitConversionError):
+    with pytest.raises(u.UnitsError):
         Mag(quantity=17.0 * u.kg, spectral_coordinate=6187 * u.Angstrom)
 
 

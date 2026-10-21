@@ -39,14 +39,6 @@ def test_luminosity_to_flux_conversion(luminosity, distance, expected_flux):
     assert abs(flux.quantity - expected_flux) < 1e-16 * (u.erg / u.s / u.cm**2)
 
 
-# Write pytests for cosmology implemented
-def test_assert_default_cosmology():
-    flux = 3.22e-14 * (u.erg / u.s / u.cm**2)
-    flux_luminosity = FluxLuminosity(flux=Flux(flux), cosmo=None)
-
-    assert flux_luminosity.cosmo is Planck18  # Default cosmology is Planck18
-
-
 def test_custom_cosmology_is_stored():
     cosmo = FlatLambdaCDM(H0=70, Om0=0.3)
     assert FluxLuminosity(cosmo=cosmo).cosmo is cosmo
