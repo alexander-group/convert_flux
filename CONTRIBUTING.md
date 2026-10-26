@@ -1,6 +1,6 @@
 # Contributing to `convert_flux`
 
-Thank you for your interest in contributing to `convert_flux`! We welcome and encourage contributions 
+Thank you for your interest in contributing to `convert_flux`! We welcome and encourage contributions
 of many kinds. Our goal is to keep this a positive, inclusive, successful, and growing community.
 
 ## Table of Contents
@@ -108,9 +108,9 @@ Commit message guidelines:
 git add files-you-changed
 git commit -m "commit-tag: Clear, descriptive commit message"
 ```
-	
+
 ## Submitting Changes
-	
+
 ### Push Your Branch
 
 ```
@@ -133,6 +133,20 @@ Tips for a successful PR:
 - Keep commit history clean
 - Respond promptly to feedback
 
+Pull Request Template
+
+```
+## Summary 
+Describe in a few sentences what feature you want to merge in. If it pertains to a specific issue, tag it here like this: Issue #11 and GitHub will link and close the issue upon merge 
+
+## Details 
+Help guide your reviewers through your changes. Keep it short - “how” things are done should be apparent from you code, and “why” they are done this way should be in the code as comments. Don’t repeat yourself! 
+## Testing 
+Document your testing here. Ideally, automation will run tests and the results will be available. If testing is more manual, paste here. If other, weird tests were needed, describe them. 
+## Follow-on 
+If other things came up and a new feature is needed for follow-on work, describe the unfinished business here. 
+```
+
 ### Updating Your PR
 
 If reviewers request changes:
@@ -150,16 +164,42 @@ git push
 - Check the issue tracker to see if the bug has already been reported
 - Check the documentation to ensure you're using the feature correctly
 
-### How to Submit a Bug Report
+### Submit a Bug Report as Follows
 
-When filing an issue, please include:
+Bug Issue Template
 
-- Clear title and description - Use a descriptive title
-- Steps to reproduce - Provide specific steps
-- Expected behavior - What you expected to happen
-- Actual behavior - What actually happened
-- Environment details - OS, Python version, package version, etc.
-- Minimal code example - If applicable, provide a minimal reproducible example
+```
+**Describe the bug**
+
+A clear and concise description of what the bug is.
+
+**To Reproduce**
+
+Steps to reproduce the behavior:
+
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
+
+**Expected behavior**
+
+A clear and concise description of what you expected to happen.
+
+**Screenshots**
+
+If applicable, add screenshots to help explain your problem.
+
+**Environment info (please complete the following information):**
+
+- PC hardware: [e.g. vagrant VM, flight computer hostname, personal computer]
+- OS: [e.g. Debian, Ubuntu, Mac OS]
+- Software version [e.g. release number or commit hash]
+
+**Additional context**
+
+Add any other context about the problem here.
+```
 
 ## Suggesting Enhancements
 
@@ -168,14 +208,23 @@ When filing an issue, please include:
 - Check the issue tracker to see if it has already been suggested
 - Check the documentation and code to see if the feature already exists
 
-### How to Submit an Enhancement Suggestion
+### Submit an Enhancement Suggestion as Follows
 
-When suggesting an enhancement, please include:
+Enhancement Request Issue Template
 
-- Clear title and description - Use a descriptive title
-- Motivation - Why would this enhancement be useful?
-- Proposed implementation - Describe how you envision it working
-- Example use cases - Provide concrete examples
+```
+## Task
+Describe in a few sentences what the task is. We need to [...] in order
+to [...].
+## Acceptance
+Describe what must exist in order for the task to be considered done:
+code changes, specific/nonstandard testing expectations, documentation,
+or a follow-on task.
+## Details
+All the nitty-gritty details someone might need to know in order to get
+started. Any helpful context or links, code snippets, line numbers, file
+names.
+```
 
 ## Coding Guidelines
 
@@ -191,7 +240,7 @@ This project follows PEP 8 with the following guidelines:
 
 We use ruff for code formatting. If you've installed pre-commit, this will run automatically.
 
-To manually format your code run 
+To manually format your code run
 ```
 ruff
 ```

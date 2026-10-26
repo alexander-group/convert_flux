@@ -61,6 +61,7 @@ dev = [
   "pre-commit", # enable pre-commit hooks
   "pytest-timeout", # ignores tests that take to long
   "python-semantic-release", # for automated semantic versioning
+  "pytest-cov" # for code coverage analyses
 ]
 
 [tool.setuptools.dynamic]

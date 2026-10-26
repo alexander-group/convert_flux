@@ -1,0 +1,80 @@
+name: Bug Report
+description: Something isn't working as I expect
+title: "[Bug]: "
+labels: ["bug"]
+assignees: []
+
+body:
+- type: markdown
+  attributes:
+    value: |
+      Thanks for reporting this bug! Please make sure you have checked closed issues and fill out the following information:
+
+- type: input
+  id: convert-flux-version
+  attributes:
+    label: "Version of `convert_flux`"
+    placeholder: "XX.YY.ZZ"
+  validations:
+    required: true
+
+- type: input
+  id: numpy-version
+  attributes:
+    label: "Version of `NumPy`"
+    placeholder: "XX.YY.ZZ"
+  validations:
+    required: true
+
+- type: input
+  id: astropy-version
+  attributes:
+    label: "Version of `astropy`"
+    placeholder: "XX.YY.ZZ"
+  validations:
+    required: true
+
+- type: textarea
+  id: other-packages
+  attributes:
+    label: "Other Relevant Environment Details"
+    description: "Please list other package versions (ex. pandas, infer_filter_info, etc.), OS, or PC hardware details."
+
+- type: textarea
+  id: bug-description
+  attributes:
+    label: "Describe the Bug"
+    description: A clear and concise description of what the bug is.
+
+- type: textarea
+  id: reproduction
+  attributes:
+    label: "To Reproduce"
+    description: |
+      Steps to reproduce the behavior:
+      1. Go to '...'
+      2. Click on '....'
+      3. Scroll down to '....'
+      4. See error
+
+- type: textarea
+  id: expected-behavior
+  attributes:
+    label: "Expected behavior"
+    description: A clear and concise description of what you expected to happen.
+
+- type: textarea
+  id: screenshots
+  attributes:
+    label: "Screenshots"
+    description: If applicable, add screenshots to help explain your problem.
+
+- type: textarea
+  id: additional-context
+  attributes:
+    label: "Additional context"
+    description: Add any other context about the problem here.
+
+- type: markdown
+  attributes:
+    value: "Thanks again for filling out this bug report! We will get to it and respond as soon as possible!"
