@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/alexander-group/convert_flux/graph/badge.svg?token=XEKC97DVXQ)](https://codecov.io/gh/alexander-group/convert_flux)
+
 # convert_flux
 A python package for converting between astronomical fluxes, flux densities, and magnitudes
 
