@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v0.0.3 (2026-10-26)
+
+### Bug Fixes
+
+- Semantic versioning not recognizing version string without prepended v
+  ([`f6f0577`](https://github.com/alexander-group/convert_flux/commit/f6f0577b44cdff7e2a01596c0134a8c9481ab91f))
+
+
 ## v0.0.2 (2026-10-26)
 
 ### Bug Fixes
