@@ -28,8 +28,11 @@ def test_mag_to_fluxdensity(spectral_coordinate):
 
     # Test if calculated value is within the tolerance of expected value
     expected_fd = 3.631e-5 * (u.Jy)
+    actual_fd = flux_density.quantity.to(
+        u.Jy, equivalencies=u.spectral_density(spectral_coordinate)
+    )
     assert (
-        abs(flux_density.quantity - expected_fd) / expected_fd <= 1e-3
+        abs(actual_fd - expected_fd) / expected_fd <= 1e-3
     ), f"Expected {expected_fd}, but got {flux_density}"
 
 
