@@ -2,6 +2,7 @@
 import astropy.units as u
 import numpy as np
 from scipy.integrate import trapezoid
+from abc import abstractmethod, ABC
 
 
 def convert_flux():
@@ -176,7 +177,7 @@ class FluxFluxDensity:
         self.flux = flux
         self.fd = flux_density
 
-    def flux_to_fluxdensity(self, transmission, wavelength, source_spec_shape=None):
+    def flux_to_fluxdensity(self, transmission, wavelength, source_spec=None):
         """
         Convert Flux to FluxDensity object using the provided source spectrum and
         transmission curve.
@@ -185,19 +186,19 @@ class FluxFluxDensity:
             transmission: The transmission array from TransmissionCurve (dimensionless).
             wavelength: The wavelength array corresponding to the overlapping ranges of
             source_flux and transmission (in Angstrom).
+            source_spec: SourceSpec instance. Defaults to FlatSpec.
 
         """
         if isinstance(transmission, np.ndarray):
             if np.size(wavelength) != np.size(transmission):
+                # add smooth or resample if they are not the same shape
+                # (open enhancement issue)
                 raise TypeError("Wavelength and transmission must have the same size")
         else:
             transmission = np.array(transmission)
 
-        weighted_tranmission = (
-            transmission * source_spec_shape
-            if source_spec_shape is not None
-            else transmission
-        )
+        source_spec = FlatSpec() if source_spec is None else source_spec
+        weighted_tranmission = transmission * source_spec.shape(wavelength)
 
         delta_nu = trapezoid(weighted_tranmission, wavelength)  # (bandwidth)
 
@@ -206,16 +207,16 @@ class FluxFluxDensity:
         ref_wavelength = (wavelength.min() + wavelength.max()) / 2
         return FluxDensity(flux_density, ref_wavelength)
 
-    def flux_density_to_flux(self, transmission, wavelength, source_spec_shape=None):
+    def flux_density_to_flux(self, transmission, wavelength, source_spec=None):
         """
         Convert FluxDensity to Flux object using the provided arrays from SourceSpec
         and TransmissionCurve.
 
         Parameters:
-            source_flux_density: The source flux density array from SourceSpec.
             transmission: The transmission array from TransmissionCurve.
             wavelength: The wavelength array corresponding to the overlapping ranges of
-            source_flux_density and transmission.
+            source_spec and transmission.
+            source_spec: SourceSpec instance. Defaults to FlatSpec.
 
         """
         if isinstance(transmission, np.ndarray):
@@ -224,11 +225,8 @@ class FluxFluxDensity:
         else:
             transmission = np.array(transmission)
 
-        weighted_transmission = (
-            transmission * source_spec_shape
-            if source_spec_shape is not None
-            else transmission
-        )
+        source_spec = FlatSpec() if source_spec is None else source_spec
+        weighted_transmission = transmission * source_spec.shape(wavelength)
         transmitted_flux = self.fd.quantity * weighted_transmission
 
         total_flux = trapezoid(transmitted_flux, wavelength)
@@ -244,22 +242,59 @@ class FluxLuminosity:
         return
 
 
-class SourceSpec:
+class SourceSpec(ABC):
     """
-    Future implementation for non-flat spectrum
-    Possibly define just the shape of the source spectrum normalized rather than the
-    full array of flux values.
+    Abstract Base Class for all source spectrum types
+    The shape is evaluated on the same wavelength grid as the transmission curve.
     """
 
-    def __init__(self):
-        self.flux = np.ones(1)
+    def shape(self, wavelength):
+        # Return one value per wavelength
+        if not isinstance(wavelength, u.Quantity):
+            raise TypeError("wavelength must be an astropy Quantity")
+
+        wavelength = wavelength.to(u.Angstrom)
+
+        fluxes = np.asarray(self._shape(wavelength), dtype=float)
+
+        return fluxes
+
+    @abstractmethod
+    def _shape(self, wavelength):
+        # Evaluate the subclass's dimensionless shape on a validated grid.
+        pass
+
+
+class FlatSpec(SourceSpec):
+    """
+    Subclass of SourceSpec ABC to define an appromixately flat source spectrum
+    """
+
+    def _shape(self, wavelength):
+        return np.ones(wavelength.shape, dtype=float)
+
+
+class LymASpec(SourceSpec):
+    """
+    Subclass of SourceSpec ABC to define a Lymna alpha break source spectrum
+    """
+
+    pass
+
+
+class PolySpec(SourceSpec):
+    """
+    Subclass of SourceSpec ABC to define an approximately polynomial source spectrum
+    """
+
+    pass
 
 
 class TransmissionCurve:
     """
     Future implementation for transmission curve
-    In wavelength space
-    will interact with the other package Noah wrote
+    (In wavelength space)
+    Will interact with transmission info package
     """
 
     def __init__(self, wavelength, transmission):
