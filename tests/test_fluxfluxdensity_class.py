@@ -3,6 +3,7 @@ import numpy as np
 import pytest
 
 from convert_flux.convert_flux import Flux, FluxDensity, FluxFluxDensity
+from convert_flux.convert_flux import FlatSpec
 
 
 @pytest.mark.parametrize(
@@ -59,3 +60,11 @@ def test_flux_to_flux_density(central_wavelength, filter_width, measured_flux):
     )
 
     assert abs(flux_density - 3.631e-5 * u.Jy) < 1e-6 * u.Jy
+
+
+def test_flat_sourcespec_shape():
+    wavelength = u.Quantity([6000, 6100, 6200, 6300], u.Angstrom)
+    flat_spec = FlatSpec().shape(wavelength)
+
+    assert isinstance(flat_spec, np.ndarray)
+    np.testing.assert_array_equal(flat_spec, np.ones(wavelength.size))
