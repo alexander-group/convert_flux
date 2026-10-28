@@ -465,16 +465,4 @@ class PolySpec(SourceSpec):
     pass
 
 
-class TransmissionCurve:
-    """
-    Future implementation for transmission curve
-    (In wavelength space)
-    Will interact with transmission info package
-    """
-
-    def __init__(self, wavelength, transmission):
-        # will be an array eventually
-        self.transmission = 1
-
-
 # utils.py SourceSpec and TransmissionCurve classes
