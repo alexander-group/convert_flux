@@ -1,3 +1,8 @@
+"""
+This file is for defining any custom units. This code must be imported for usage of
+    Vega magnitude system (and any customized units)
+"""
+
 # Import dependencies here
 from astropy import units as u
 
