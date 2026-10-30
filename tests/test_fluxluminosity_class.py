@@ -1,7 +1,8 @@
 import pytest
 import astropy.units as u
 from astropy.cosmology import FlatLambdaCDM, Planck18
-from convert_flux.convert_flux import Flux, Luminosity, FluxLuminosity
+from convert_flux.brightness_models import Flux, Luminosity
+from convert_flux.converters import FluxLuminosity
 
 
 def test_flux_to_luminosity_creation():

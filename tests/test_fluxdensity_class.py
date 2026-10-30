@@ -1,6 +1,6 @@
 import pytest
 import astropy.units as u
-from convert_flux.convert_flux import FluxDensity
+from convert_flux.brightness_models import FluxDensity
 
 
 def test_fluxdensity_quantity_created():
