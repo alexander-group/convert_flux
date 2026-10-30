@@ -2,8 +2,9 @@ import astropy.units as u
 import numpy as np
 import pytest
 
-from convert_flux.convert_flux import Flux, FluxDensity, FluxFluxDensity
-from convert_flux.convert_flux import FlatSpec
+from convert_flux.brightness_models import Flux, FluxDensity
+from convert_flux.converters import FluxFluxDensity
+from convert_flux.source_spec_models import FlatSpec
 
 
 @pytest.mark.parametrize(

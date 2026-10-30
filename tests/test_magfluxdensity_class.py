@@ -1,7 +1,8 @@
 # Import dependencies here
 import pytest
 import astropy.units as u
-from convert_flux.convert_flux import Mag, FluxDensity, MagFluxDensity
+from convert_flux.brightness_models import Mag, FluxDensity
+from convert_flux.converters import MagFluxDensity
 
 
 @pytest.mark.parametrize(

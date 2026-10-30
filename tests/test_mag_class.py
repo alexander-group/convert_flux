@@ -1,7 +1,7 @@
 # Import packages here
 import pytest
 import astropy.units as u
-from convert_flux.convert_flux import Mag
+from convert_flux.brightness_models import Mag
 
 
 # Test if astropy quantity is created
