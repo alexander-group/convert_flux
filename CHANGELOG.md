@@ -2,6 +2,22 @@
 
 <!-- version list -->
 
+## v0.1.0 (2026-10-30)
+
+### Build System
+
+- Add vscode directory to gitignore
+  ([`caf0bc4`](https://github.com/alexander-group/convert_flux/commit/caf0bc4b7c24380f5032622a9fbd7664a33e69c1))
+
+- Created new transmission.py to start brainstorming
+  ([`c454524`](https://github.com/alexander-group/convert_flux/commit/c454524c4c18bbb6a5687f0672233fc2593f8913))
+
+### Features
+
+- Refactor codebase to separate helper functions and units from the source class convert_flux
+  ([`efe6553`](https://github.com/alexander-group/convert_flux/commit/efe6553d9fed643b93e1a5e30312f83e43040c32))
+
+
 ## v0.0.3 (2026-10-26)
 
 ### Bug Fixes
