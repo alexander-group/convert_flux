@@ -1,6 +1,6 @@
 import pytest
 import astropy.units as u
-from convert_flux.convert_flux import Luminosity
+from convert_flux.brightness_models import Luminosity
 
 
 def test_luminosity_quantity_created():
