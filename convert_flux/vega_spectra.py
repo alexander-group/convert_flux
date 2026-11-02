@@ -23,12 +23,13 @@ def vega_spectra(input_file=None, catalog=None):
         pass
 
     # Otherwise, read template HST/STIS Vega spectrum from CALSPEC
+    # Wavelength coverage: 900-3e6 AA
     else:
         hdul = fits.open("vega_spectra/alpha_lyr_stis_012_template.fits")
         data = hdul[1].data
 
         ## Convert both wavelength and flux to astropy Quantities
-        ## Wavelength is in Angstroms, flux density is in erg / (s cm^2 Angstrom)
+        ## Wavelength is in Angstrom, flux density is in erg / (s cm^2 Angstrom)
         wavelength = u.Quantity(np.array(data["WAVELENGTH"]), unit=u.AA)
         flux_density = u.Quantity(
             np.array(data["FLUX"]), unit=u.erg / u.s / u.cm**2 / u.AA
