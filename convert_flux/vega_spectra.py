@@ -4,6 +4,7 @@ import astropy.units as u
 import numpy as np
 
 
+# Add this to pyproject.toml
 def vega_spectra(input_file=None, catalog=None):
     """
     This function queries Vega spectrum from a user-specified or reads a FITS or text
@@ -22,8 +23,7 @@ def vega_spectra(input_file=None, catalog=None):
     elif input_file is not None:
         pass
 
-    # Otherwise, read template HST/STIS Vega spectrum from CALSPEC
-    # Wavelength coverage: 900-3e6 AA
+    # Otherwise, use template HST/STIS Vega spectrum (900-3e6 AA) from CALSPEC
     else:
         hdul = fits.open("vega_spectra/alpha_lyr_stis_012_template.fits")
         data = hdul[1].data
@@ -37,3 +37,6 @@ def vega_spectra(input_file=None, catalog=None):
 
     # Return the data
     return (wavelength, flux_density)
+
+
+print(vega_spectra()[0])

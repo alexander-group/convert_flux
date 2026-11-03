@@ -41,9 +41,13 @@ class Mag:
         # Define separate equivalencies if user wants to convert from/to Vega mag
         if quantity.unit == VEGAMAG:
             ## Do something once we have SourceSpectrum class ready
+            ## Look at synphot conversion
+            ## Improve conversion speed
             return
         elif chosen_mag_system == VEGAMAG:
             ## Do something once we have SourceSpectrum class ready
+            ## Look at synphot conversion
+            ## Improve conversion speed
             return
 
         # Convert from non-Vega magnitude to AB magnitude by default
