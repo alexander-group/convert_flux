@@ -1,5 +1,6 @@
 # Import dependencies here
 from astropy.io import fits
+from astropy.io import ascii
 import astropy.units as u
 import numpy as np
 from pathlib import Path
@@ -8,11 +9,13 @@ from pathlib import Path
 # Define a function to work with Vega spectrum file
 # and return arrays of wavelength and flux density values
 def vega_spectra(
+    catalog=None,
     input_file_path=None,
     wavelength_var_name=None,
     fluxdensity_var_name=None,
     hdul_idx=None,
-    catalog=None,
+    wavelength_unit=None,
+    fluxdensity_unit=None,
 ):
     """
     This function queries Vega spectrum from a user-specified or reads a FIT/FITS or TXT
@@ -26,12 +29,18 @@ def vega_spectra(
             spectrum file. Must be provided if input_file_path is not None
         hdul_idx (int, optional): index of HDUL in FIT/FITS file with spectrum data.
             Must be provided if input file is .fit/.fits file
+        wavelength_unit (astropy Units, optional): Wavelength unit in user-inputted
+            spectrum file. Must be provided if input_file_path is not None
+        fluxdensity_var_name (astropy Units, optional): Flux density unit in
+            user-inputted spectrum file. Must be provided if input_file_path is not None
     Returns:
-        A tuple of two NumPy arrays (wavelength, flux)
+        A tuple of two NumPy arrays (wavelength, flux) of astropy quantities
     Raises:
         ValueError: if the input spectrum file is not FIT/FITS or TXT file
-        KeyError: if the keywords for wavelength and flux density or index of HDUL (of
+        KeyError: if the keywords for wavelength/ flux density or index of HDUL (of
             FIT/FITS file) with spectru data is missing
+        AttributeError: if astropy Units for wavelength or flux density in user-inputted
+            spectrum file is missing.
     """
     # Do something if user wants to query Vega spectrum from surveys
     if catalog is not None:
@@ -41,22 +50,45 @@ def vega_spectra(
     elif input_file_path is not None:
         ## Raise error if keyword for wavelength or flux density is missing
         if wavelength_var_name is None or fluxdensity_var_name is None:
-            raise KeyError("Please provide keyword(s) for wavelength and flux density.")
+            raise KeyError("Please provide keywords for wavelength and flux density.")
+
+        ## Raise error if astropy Units for wavelength or flux density is missing
+        if wavelength_unit is None or fluxdensity_unit is None:
+            raise AttributeError(
+                "Please provide units for wavelength and flux density in astropy Units"
+            )
 
         ## Get file extension for verification
         extension = Path(input_file_path).suffix
 
         ## Work with FIT/FITS file
         if extension.lower() in (".fit", ".fits"):
+            ### Raise error if index of HDUL with spectrum data is missing
             if hdul_idx is None:
                 raise KeyError("Please provide index of HDUL with spectrum data.")
             else:
                 hdul = fits.open(input_file_path)
                 data = hdul[hdul_idx].data
 
+                ## Convert both wavelength and flux to astropy Quantities
+                wavelength = u.Quantity(
+                    np.array(data[wavelength_var_name]), unit=wavelength_unit
+                )
+                flux_density = u.Quantity(
+                    np.array(data[fluxdensity_var_name]), unit=fluxdensity_unit
+                )
+
         ## Work with TXT file
         elif extension.lower() == ".txt":
-            pass
+            data = ascii.read(input_file_path)
+
+            ## Convert both wavelength and flux to astropy Quantities
+            wavelength = u.Quantity(
+                np.array(data[wavelength_var_name]), unit=wavelength_unit
+            )
+            flux_density = u.Quantity(
+                np.array(data[fluxdensity_var_name]), unit=fluxdensity_unit
+            )
 
         ## Raise error if input spectrum file is not supported
         else:
