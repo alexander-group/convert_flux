@@ -108,6 +108,12 @@ def vega_spectra(
             np.array(data["FLUX"]), unit=u.erg / u.s / u.cm**2 / u.AA
         )
 
+    # Convert flux density to erg/s/cm^2/Angstrom if not already
+    if wavelength.unit != u.erg / u.s / u.cm**2 / u.AA:
+        flux_density = flux_density.to(
+            u.erg / u.s / u.cm**2 / u.AA, equivalencies=u.spectral_density(wavelength)
+        )
+
     # Return the data
     return (wavelength, flux_density)
 
