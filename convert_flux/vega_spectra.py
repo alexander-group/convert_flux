@@ -5,11 +5,13 @@ import numpy as np
 from pathlib import Path
 
 
+# Define a function to work with Vega spectrum file
+# and return arrays of wavelength and flux density values
 def vega_spectra(
     input_file_path=None,
     wavelength_var_name=None,
     fluxdensity_var_name=None,
-    hdul_number=None,
+    hdul_idx=None,
     catalog=None,
 ):
     """
@@ -22,12 +24,14 @@ def vega_spectra(
             spectrum file. Must be provided if input_file_path is not None
         fluxdensity_var_name (str, optional): variable for flux density in user-inputted
             spectrum file. Must be provided if input_file_path is not None
-        hdul_number (int, optional): number of HDUL in FIT/FITS file with spectrum data.
+        hdul_idx (int, optional): index of HDUL in FIT/FITS file with spectrum data.
             Must be provided if input file is .fit/.fits file
     Returns:
         A tuple of two NumPy arrays (wavelength, flux)
     Raises:
         ValueError: if the input spectrum file is not FIT/FITS or TXT file
+        KeyError: if the keywords for wavelength and flux density or index of HDUL (of
+            FIT/FITS file) with spectru data is missing
     """
     # Do something if user wants to query Vega spectrum from surveys
     if catalog is not None:
@@ -39,9 +43,18 @@ def vega_spectra(
         if wavelength_var_name is None or fluxdensity_var_name is None:
             raise KeyError("Please provide keyword(s) for wavelength and flux density.")
 
-        extension = Path(input_file_path).suffix  ## Get file extension for verification
+        ## Get file extension for verification
+        extension = Path(input_file_path).suffix
+
+        ## Work with FIT/FITS file
         if extension.lower() in (".fit", ".fits"):
-            pass
+            if hdul_idx is None:
+                raise KeyError("Please provide index of HDUL with spectrum data.")
+            else:
+                hdul = fits.open(input_file_path)
+                data = hdul[hdul_idx].data
+
+        ## Work with TXT file
         elif extension.lower() == ".txt":
             pass
 
