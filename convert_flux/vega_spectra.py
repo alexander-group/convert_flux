@@ -13,10 +13,10 @@ def vega_spectra(
     catalog=None,
 ):
     """
-    This function queries Vega spectrum from a user-specified or reads a FITS or text
+    This function queries Vega spectrum from a user-specified or reads a FIT/FITS or TXT
         file and returns the wavelength and flux values of the input spectrum
     Args:
-        input_file_path (str, optional): path to spectrum file (FITS or TXT only)
+        input_file_path (str, optional): path to spectrum file (FIT/FITS or TXT only)
         catalog (str, optional): catalog to query from
         wavelength_var_name (str, optional): variable for wavelength in user-inputted
             spectrum file. Must be provided if input_file_path is not None
@@ -35,11 +35,17 @@ def vega_spectra(
 
     # Work with spectrum file from user (if provided)
     elif input_file_path is not None:
+        ## Raise error if keyword for wavelength or flux density is missing
+        if wavelength_var_name is None or fluxdensity_var_name is None:
+            raise KeyError("Please provide keyword(s) for wavelength and flux density.")
+
         extension = Path(input_file_path).suffix  ## Get file extension for verification
         if extension.lower() in (".fit", ".fits"):
             pass
         elif extension.lower() == ".txt":
             pass
+
+        ## Raise error if input spectrum file is not supported
         else:
             raise ValueError(
                 "Invalid file extension. Only .fit/.fits or .txt files are supported."
