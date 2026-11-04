@@ -2,26 +2,36 @@
 from astropy.io import fits
 import astropy.units as u
 import numpy as np
+from pathlib import Path
 
 
-# Add this to pyproject.toml
-def vega_spectra(input_file=None, catalog=None):
+def vega_spectra(input_file_path=None, catalog=None):
     """
     This function queries Vega spectrum from a user-specified or reads a FITS or text
         file and returns the wavelength and flux values of the input spectrum
     Args:
-        input_file (str, optional): path to spectrum file (only supports FITS or TXT)
+        input_file_path (str, optional): path to spectrum file (FITS or TXT only)
         catalog (str, optional): catalog to query from
     Returns:
         A tuple of two NumPy arrays (wavelength, flux)
+    Raises:
+        ValueError: if the input spectrum file is not FIT/FITS or TXT file
     """
     # Do something if user wants to query Vega spectrum from surveys
     if catalog is not None:
         pass
 
     # Do something if user provides their own Vega spectra
-    elif input_file is not None:
-        pass
+    elif input_file_path is not None:
+        extension = Path(input_file_path).suffix  ## Get file extension for verification
+        if extension.lower() in (".fit", ".fits"):
+            pass
+        elif extension.lower() == ".txt":
+            pass
+        else:
+            raise ValueError(
+                "Invalid file extension. Only .fit/.fits or .txt files are supported."
+            )
 
     # Otherwise, use template HST/STIS Vega spectrum (900-3e6 AA) from CALSPEC
     else:
