@@ -9,6 +9,7 @@ def vega_spectra(
     input_file_path=None,
     wavelength_var_name=None,
     fluxdensity_var_name=None,
+    hdul_number=None,
     catalog=None,
 ):
     """
@@ -17,6 +18,12 @@ def vega_spectra(
     Args:
         input_file_path (str, optional): path to spectrum file (FITS or TXT only)
         catalog (str, optional): catalog to query from
+        wavelength_var_name (str, optional): variable for wavelength in user-inputted
+            spectrum file. Must be provided if input_file_path is not None
+        fluxdensity_var_name (str, optional): variable for flux density in user-inputted
+            spectrum file. Must be provided if input_file_path is not None
+        hdul_number (int, optional): number of HDUL in FIT/FITS file with spectrum data.
+            Must be provided if input file is .fit/.fits file
     Returns:
         A tuple of two NumPy arrays (wavelength, flux)
     Raises:
