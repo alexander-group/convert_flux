@@ -5,7 +5,12 @@ import numpy as np
 from pathlib import Path
 
 
-def vega_spectra(input_file_path=None, catalog=None):
+def vega_spectra(
+    input_file_path=None,
+    wavelength_var_name=None,
+    fluxdensity_var_name=None,
+    catalog=None,
+):
     """
     This function queries Vega spectrum from a user-specified or reads a FITS or text
         file and returns the wavelength and flux values of the input spectrum
@@ -21,7 +26,7 @@ def vega_spectra(input_file_path=None, catalog=None):
     if catalog is not None:
         pass
 
-    # Do something if user provides their own Vega spectra
+    # Work with spectrum file from user (if provided)
     elif input_file_path is not None:
         extension = Path(input_file_path).suffix  ## Get file extension for verification
         if extension.lower() in (".fit", ".fits"):
