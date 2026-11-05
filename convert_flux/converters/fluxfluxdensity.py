@@ -1,4 +1,3 @@
-import numpy as np
 from ..brightness_models import FluxDensity, Flux
 from scipy.integrate import trapezoid
 from ..source_spec_models import FlatSpec
@@ -43,14 +42,6 @@ class FluxFluxDensity:
             source_spec: SourceSpec instance. Defaults to FlatSpec.
 
         """
-        if isinstance(transmission, np.ndarray):
-            if np.size(wavelength) != np.size(transmission):
-                # add smooth or resample if they are not the same shape
-                # (open enhancement issue)
-                raise TypeError("Wavelength and transmission must have the same size")
-        else:
-            transmission = np.array(transmission)
-
         source_spec = FlatSpec() if source_spec is None else source_spec
         weighted_tranmission = transmission * source_spec.shape(wavelength)
 
@@ -73,12 +64,6 @@ class FluxFluxDensity:
             source_spec: SourceSpec instance. Defaults to FlatSpec.
 
         """
-        if isinstance(transmission, np.ndarray):
-            if np.size(wavelength) != np.size(transmission):
-                raise TypeError("wavelength and transmission must have the same size")
-        else:
-            transmission = np.array(transmission)
-
         source_spec = FlatSpec() if source_spec is None else source_spec
         weighted_transmission = transmission * source_spec.shape(wavelength)
         transmitted_flux = self.fd.quantity * weighted_transmission
