@@ -53,3 +53,11 @@ class PolySpec(SourceSpec):
     """
 
     pass
+
+
+class VegaSpec(SourceSpec):
+    """
+    Subclass of SourceSpec ABC to define the Vega source spectrum
+    """
+
+    pass

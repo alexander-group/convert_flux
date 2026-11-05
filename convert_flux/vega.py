@@ -7,7 +7,6 @@ from pathlib import Path
 
 
 # Define a function to work with Vega spectrum file
-# and return arrays of wavelength and flux density values
 def vega_spectra(
     catalog=None,
     input_file_path=None,
@@ -118,4 +117,40 @@ def vega_spectra(
     return (wavelength, flux_density)
 
 
-print(vega_spectra()[0])
+# test = vega_spectra()[0] - [100, 200, 300]* u.AA
+# print(np.argmin(test))
+
+
+# Define the function to look for Vega flux density at specified wavelengths
+def spectral_density_vega(wavelengths, vega_spectrum):
+    """
+    This function takes in a Vega spectrum (wavelength, flux density) and look for
+        corresponding flux densities at specified wavelenths
+    Args:
+        vega_spectrum (tuple): A tuple in the order of (wavelength, flux density) that
+            represents the spectrum of Vega. Best if using output by the function
+            vega_spectra, but otherwise, both wavelength and flux density must be
+            numpy array of astropy Quantities.
+        wavelengths (numpy array of astropy Quantities): Wavelength(s) to find the
+            corresponding Vega flux density
+    Returns:
+        Numpy array of Vega flux densities
+    """
+    ## Array to store Vega flux densities
+    wanted_vega_fd = np.zeros_like(wavelengths)
+
+    # Get Vega spectrum (wavelength, flux density)
+    vega_wavelength, vega_fd = vega_spectrum[0], vega_spectrum[1]
+
+    # Look for flux densities at specified wavelengths
+    for i in range(len(wavelengths)):
+        ## Find the closest wavelength in the Vega spectrum to the desired wavelength
+        wav = wavelengths[i]
+        wavelength_diff = np.abs(vega_wavelength.value - wav)
+        wanted_idx = np.argmin(wavelength_diff)
+
+        ## Find the Vega flux density at corresponding wavelength and add to output
+        wanted_vega_fd[i] = vega_fd[wanted_idx]
+
+    # Return the array with wanted Vega flux densities
+    return wanted_vega_fd
