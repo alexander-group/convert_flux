@@ -1,6 +1,6 @@
 from ..brightness_models import FluxDensity, Flux
 from scipy.integrate import trapezoid
-from ..source_spec_models import FlatSpec
+from ..utils import FlatSpec
 
 
 class FluxFluxDensity:

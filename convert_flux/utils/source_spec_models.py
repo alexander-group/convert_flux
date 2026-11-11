@@ -50,6 +50,7 @@ class LymASpec(SourceSpec):
 class PolySpec(SourceSpec):
     """
     Subclass of SourceSpec ABC to define an approximately polynomial source spectrum
+    Could use Polynomial1D or PowerLaw1D from astropy.modeling
     """
 
     pass
