@@ -32,7 +32,7 @@ class TransmissionCurve:
         self.transmission = transmission[order]
 
     @staticmethod
-    def from_filter(filter_name, *args, curve=None, **kwargs):
+    def from_filter(filter_name, curve, *args, **kwargs):
         """ """
         try:
             _, sens = infer_filter_info(filter_name, *args, **kwargs)
@@ -40,6 +40,7 @@ class TransmissionCurve:
             # throw an error if infer_filter_info from SVO can't find a curve
             # fall back to the user-provided curve, if any
             if curve is None:
+                # add a wrapper class to make the user pass a wavelength array
                 raise LookupError(
                     "Could not find transmission curve. To use a "
                     "standard flat curve, pass"
