@@ -2,7 +2,8 @@ import pytest
 import astropy.units as u
 import numpy as np
 
-from convert_flux.transmission import TransmissionCurve
+from convert_flux.utils import TransmissionCurve
+from unittest.mock import MagicMock, patch
 
 
 def test_must_give_arguments():
@@ -17,9 +18,9 @@ def test_custom_curve():
     assert isinstance(curve, TransmissionCurve)
 
 
-def test_wavelength_transmission_same_size():
-    with pytest.raises(TypeError):
-        TransmissionCurve([1000, 2000] * u.Angstrom, [0.1, 0.3, 0.5])
+def test_wavelength_transmission_resampling():
+    curve = TransmissionCurve([1000, 2000] * u.Angstrom, [0.1, 0.3, 0.5])
+    assert curve.wavelength.shape == curve.transmission.shape
 
 
 def test_wavelength_ordering():
@@ -29,11 +30,20 @@ def test_wavelength_ordering():
 
 
 def test_validate_infer_filter_info_query():
-    # checks if infer_filter_info query works
-    curve = TransmissionCurve.from_filter("g")
+    # mock infer_filter_info so the test doesn't query SVO
+    wavelength = np.array([1000.0, 2000.0, 3000.0])
+    transmission = np.array([0.1, 0.3, 0.5])
+    mock_query = MagicMock(return_value=(None, (wavelength, transmission)))
+
+    with patch("convert_flux.utils.transmission.infer_filter_info", mock_query):
+        curve = TransmissionCurve.from_filter("g", curve=None)
+
+    mock_query.assert_called_once_with("g")
     assert isinstance(curve, TransmissionCurve)
     assert curve.wavelength.unit == u.Angstrom
     assert curve.wavelength.shape == curve.transmission.shape
+    assert np.array_equal(curve.wavelength.value, wavelength)
+    assert np.array_equal(curve.transmission, transmission)
 
 
 def test_return_initial_curve_when_filter_not_found():
