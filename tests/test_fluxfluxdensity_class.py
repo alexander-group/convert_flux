@@ -4,7 +4,7 @@ import pytest
 
 from convert_flux.brightness_models import Flux, FluxDensity
 from convert_flux.converters import FluxFluxDensity
-from convert_flux.source_spec_models import FlatSpec
+from convert_flux.utils import FlatSpec
 
 
 @pytest.mark.parametrize(
