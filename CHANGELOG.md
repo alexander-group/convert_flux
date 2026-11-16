@@ -2,6 +2,24 @@
 
 <!-- version list -->
 
+## v0.2.0 (2026-11-16)
+
+### Build System
+
+- Define convert_flux() arguments and returns with function stub and docstring
+  ([`f6fc9d5`](https://github.com/alexander-group/convert_flux/commit/f6fc9d5e831f8e25dd585d9674890705f4787a6a))
+
+### Features
+
+- Add AI usage logging and CLAUDE workflow preferences
+  ([`3a0d94f`](https://github.com/alexander-group/convert_flux/commit/3a0d94f8f44a4d775b8a71ce97e90f269cfce765))
+
+### Refactoring
+
+- Reorganize imports and enhance docstrings for clarity
+  ([`a0afeba`](https://github.com/alexander-group/convert_flux/commit/a0afeba640af12ae3c5f762c58c063d89a2e4f10))
+
+
 ## v0.1.0 (2026-10-30)
 
 ### Build System
