@@ -2,6 +2,8 @@
 from astropy.io import fits
 from astropy.io import ascii
 import astropy.units as u
+from astropy.units import Equivalency
+from convert_flux_units import VEGAMAG
 import numpy as np
 from pathlib import Path
 
@@ -108,19 +110,21 @@ class VegaFD:
         path = Path(self.input_file)
         extension = path.suffix.lower()
 
+        # Work with FIT/FITS file
         if extension in (".fit", ".fits"):
-            if hdul_idx is None:
+            try:
+                with fits.open(path, memmap=True) as hdul:
+                    data = hdul[hdul_idx].data
+                    wavelength = u.Quantity(
+                        data[wavelength_var_name], unit=wavelength_unit, copy=True
+                    )
+                    flux_density = u.Quantity(
+                        data[fluxdensity_var_name], unit=fluxdensity_unit, copy=True
+                    )
+            except hdul_idx is None:
                 raise KeyError("Please provide index of HDUL with spectrum data.")
-            # Use memmap=True to optimize memory overhead for large FITS files
-            with fits.open(path, memmap=True) as hdul:
-                data = hdul[hdul_idx].data
-                wavelength = u.Quantity(
-                    data[wavelength_var_name], unit=wavelength_unit, copy=True
-                )
-                flux_density = u.Quantity(
-                    data[fluxdensity_var_name], unit=fluxdensity_unit, copy=True
-                )
 
+        # Work on TXT file
         elif extension == ".txt":
             data = ascii.read(path)
             wavelength = u.Quantity(
@@ -129,6 +133,8 @@ class VegaFD:
             flux_density = u.Quantity(
                 data[fluxdensity_var_name], unit=fluxdensity_unit, copy=False
             )
+
+        # Raise error for unsupported file types
         else:
             raise ValueError(
                 "Invalid file extension. Only .fit/.fits or .txt files are supported."
@@ -167,8 +173,7 @@ class VegaFD:
 
         # Create a 2D pairwise difference matrix
         diff_matrix = np.abs(
-            vega_wavelength.value[None, :]
-            - np.atleast_1d(converted_wavelegnth.value)[:, None]
+            vega_wavelength[None, :] - np.atleast_1d(converted_wavelegnth)[:, None]
         )
 
         # Find the closest Vega index for every target wavelength simultaneously
@@ -177,6 +182,51 @@ class VegaFD:
         # Return scalar if input was scalar, otherwise return array
         result = vega_fd[wanted_idx]
         return result[0] if converted_wavelegnth.isscalar else result
+
+
+# Define the equivalency between magnitudes and flux densities for Vega system
+class VegaMagFluxDensityEquivalency(Equivalency):
+    """
+    Custom equivalency between Vega magnitude and flux density
+
+    Attributes:
+        Equivalency (astropy Equivalency): custom equivalency
+    """
+
+    def __int__(self, flux_density):
+        # Convert flux density to our standard unit: erg/s/cm^2/AA
+        pass
+
+    # Conversion functions between Vega magnitude and flux density
+    def vegamag_to_fd(self, vega_mag, vega_fd):
+        """
+        This function converts from Vega magnitude to flux density
+        Args:
+            vega_mag (floats): magnitude in Vega system
+            vega_fd (floats): Vega's flux density at specified wavelength(s)
+        Returns:
+            Flux density as floats
+        """
+        return vega_fd * (10 ** (-0.4 * vega_mag))
+
+    def fd_to_vegamag(self, flux_density, vega_fd):
+        """
+        This function converts from flux density to Vega magnitude
+        Args:
+            flux_density (floats): flux density
+            vega_fd (floats): Vega's flux density at specified wavelength(s)
+        Returns:
+            Vega magnitude as floats
+        """
+        return -2.5 * np.log10(flux_density / vega_fd)
+
+    # Define the tuple: (from_unit, to_unit, forward_conversion, backward_conversion)
+    equivalency_tuple = [
+        (VEGAMAG, u.erg / u.s / u.cm**2 / u.AA, vegamag_to_fd, fd_to_vegamag)
+    ]
+
+    # Initialize the parent Equivalency class
+    super().init(equivalency_tuple, name="VegaMag_FluxDensity")
 
 
 # Define the function to look for Vega flux density at specified wavelengths
