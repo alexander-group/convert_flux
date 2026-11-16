@@ -204,30 +204,30 @@ class VegaSpec:
 
 
 # Define the function to look for Vega flux density at specified wavelengths
-def spectral_density_vega(vega_spectrum, wavelengths):
+def spectral_density_vega(vega_spectrum, spectral_coordinates):
     """
     This function takes in a Vega spectrum (wavelength, flux density) and look for
         corresponding flux densities at specified wavelenths
     Args:
-        vega_spectrum (tuple): A tuple in the order of (wavelength, flux density)
-            that represents the spectrum of Vega. Both wavelength and flux density
-            must be numpy arrays of astropy Quantities.
-        wavelengths (numpy array of astropy Quantities): Wavelength(s) to find the
-            corresponding Vega flux density from user
+        vega_spectrum (tuple): A tuple in the order of
+            (wavelength/frequency, flux density) representing Vega's spectrum.
+            Both must be numpy arrays of astropy Quantities.
+        spectral_coordinates (numpy array of astropy Quantities): Spectral coordinate(s)
+            to find the corresponding Vega flux density
     Returns:
         Numpy array of Vega flux densities
     """
     # Get Vega spectrum (wavelength, flux density)
-    vega_wavelength, vega_fd = vega_spectrum
+    vega_spectral_coord, vega_fd = vega_spectrum
 
-    # Match input wavelength to Vega spectrum wavelength
-    converted_spectral_coordinates = u.Quantity(wavelengths).to(
-        vega_wavelength.unit, equivalencies=u.spectral_density(vega_wavelength)
+    # Match input spectral coordinates to Vega spectrum's spectral coordinates
+    converted_spectral_coordinates = u.Quantity(spectral_coordinates).to(
+        vega_spectral_coord.unit, equivalencies=u.spectral_density(vega_spectral_coord)
     )
 
     # Create a 2D pairwise difference matrix
     diff_matrix = np.abs(
-        vega_wavelength[None, :]
+        vega_spectral_coord[None, :]
         - np.atleast_1d(converted_spectral_coordinates)[:, None]
     )
 
@@ -236,7 +236,7 @@ def spectral_density_vega(vega_spectrum, wavelengths):
 
     # Return scalar if input was scalar, otherwise return array
     result = vega_fd[wanted_idx]
-    return result[0] if converted_spectral_coordinates.isscalar else result
+    return result
 
 
 wavelength, flux_density = VegaSpec().spectra()
