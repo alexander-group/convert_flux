@@ -193,40 +193,78 @@ class VegaMagFluxDensityEquivalency(Equivalency):
         Equivalency (astropy Equivalency): custom equivalency
     """
 
-    def __int__(self, flux_density):
-        # Convert flux density to our standard unit: erg/s/cm^2/AA
-        pass
+    def __init__(self, vega_fd):
+        """
+        (Super) initialize the class
+        Args:
+            vega_fd (astropy Quantity): Vega's flux density at specified wavelength
+        Raises:
+            UnitConversionError: If input flux density and Vega's flux density are not
+                equivalent astropy Quantities (e.g., wavelength and frequency-based)
+        """
+
+        # Define forward (mag -> flux_density) and
+        # backward (flux_density -> mag) conversions
+        # Both conversions must accept and return floats/arrays
+        def vegamag_to_fd(vega_mag):
+            """
+            This function converts from Vega magnitude to flux density
+            Args:
+                vega_mag (floats): magnitude in Vega system
+                vega_fd (floats): Vega's flux density at specified wavelength(s)
+            Returns:
+                Flux density as floats
+            """
+            return vega_fd * (10 ** (-0.4 * vega_mag))
+
+        def fd_to_vegamag(flux_density):
+            """
+            This function converts from flux density to Vega magnitude
+            Args:
+                flux_density (floats): flux density
+                vega_fd (floats): Vega's flux density at specified wavelength(s)
+            Returns:
+                Vega magnitude as floats
+            """
+            return -2.5 * np.log10(flux_density / vega_fd)
+
+        equivalency_tuple = [
+            (VEGAMAG, u.erg / u.s / u.cm**2 / u.AA, vegamag_to_fd, fd_to_vegamag)
+        ]
+
+        # Initialize the parent Equivalency class with the list of conversion tuples
+        super().__init__(equivalency_tuple)
 
     # Conversion functions between Vega magnitude and flux density
-    def vegamag_to_fd(self, vega_mag, vega_fd):
-        """
-        This function converts from Vega magnitude to flux density
-        Args:
-            vega_mag (floats): magnitude in Vega system
-            vega_fd (floats): Vega's flux density at specified wavelength(s)
-        Returns:
-            Flux density as floats
-        """
-        return vega_fd * (10 ** (-0.4 * vega_mag))
+    # def vegamag_to_fd(self, vega_mag, vega_fd):
+    #     """
+    #     This function converts from Vega magnitude to flux density
+    #     Args:
+    #         vega_mag (floats): magnitude in Vega system
+    #         vega_fd (floats): Vega's flux density at specified wavelength(s)
+    #     Returns:
+    #         Flux density as floats
+    #     """
+    #     return vega_fd * (10 ** (-0.4 * vega_mag))
 
-    def fd_to_vegamag(self, flux_density, vega_fd):
-        """
-        This function converts from flux density to Vega magnitude
-        Args:
-            flux_density (floats): flux density
-            vega_fd (floats): Vega's flux density at specified wavelength(s)
-        Returns:
-            Vega magnitude as floats
-        """
-        return -2.5 * np.log10(flux_density / vega_fd)
+    # def fd_to_vegamag(self, flux_density, vega_fd):
+    #     """
+    #     This function converts from flux density to Vega magnitude
+    #     Args:
+    #         flux_density (floats): flux density
+    #         vega_fd (floats): Vega's flux density at specified wavelength(s)
+    #     Returns:
+    #         Vega magnitude as floats
+    #     """
+    #     return -2.5 * np.log10(flux_density / vega_fd)
 
-    # Define the tuple: (from_unit, to_unit, forward_conversion, backward_conversion)
-    equivalency_tuple = [
-        (VEGAMAG, u.erg / u.s / u.cm**2 / u.AA, vegamag_to_fd, fd_to_vegamag)
-    ]
+    # # Define the tuple: (from_unit, to_unit, forward_conversion, backward_conversion)
+    # equivalency_tuple = [
+    #     (VEGAMAG, u.erg / u.s / u.cm**2 / u.AA, vegamag_to_fd, fd_to_vegamag)
+    # ]
 
     # Initialize the parent Equivalency class
-    super().init(equivalency_tuple, name="VegaMag_FluxDensity")
+    # super().__init__(equivalency_tuple, name="VegaMag_FluxDensity")
 
 
 # Define the function to look for Vega flux density at specified wavelengths
@@ -374,5 +412,5 @@ def vega_spectra(
     return (wavelength, flux_density)
 
 
-test = vega_spectra()[0] - [100, 200, 300] * u.AA
-print(np.argmin(test))
+# test = vega_spectra()[0] - [100, 200, 300] * u.AA
+# print(np.argmin(test))
