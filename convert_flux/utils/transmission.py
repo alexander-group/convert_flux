@@ -3,11 +3,7 @@ import astropy.units as u
 from scipy.signal import resample
 from infer_filter_info import infer_filter_info
 from infer_filter_info.exceptions import MissingDefaultError
-
-
-class TransmissionCurveError(LookupError):
-    """Raises when no transmission curve is found."""
-
+from ..exceptions import TransmissionCurveError
 
 class TransmissionCurve:
     """
@@ -40,7 +36,7 @@ class TransmissionCurve:
         # order wavelengths from smallest to largest
         order = np.argsort(wavelength)
 
-        if np.asarray(transmission).shape != wavelength.shape:
+        if transmission.shape != wavelength.shape:
             transmission = resample(transmission, wavelength.size)
 
         self.wavelength = wavelength[order]
