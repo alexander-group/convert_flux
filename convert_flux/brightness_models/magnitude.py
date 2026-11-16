@@ -1,5 +1,5 @@
 import astropy.units as u
-from ..convert_flux_units import VEGAMAG
+from ..utils import VEGAMAG
 
 
 class Mag:
