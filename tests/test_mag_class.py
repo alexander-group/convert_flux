@@ -41,3 +41,6 @@ def test_type_error_for_non_quantity_mag():
 def test_type_error_for_non_quantity_spec_coord():
     with pytest.raises(TypeError):
         Mag(quantity=3.631 * u.STmag, spectral_coordinate=6187)
+
+
+# Test
