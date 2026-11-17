@@ -121,10 +121,6 @@ class VegaSpec:
                     )
             except hdul_idx is None:
                 raise KeyError("Please provide index of HDUL with spectrum data.")
-            except KeyError:
-                raise KeyError(
-                    "Please specify keywords for wavelength and/or flux density. "
-                )
 
         # Work on TXT file
         elif extension == ".txt":
