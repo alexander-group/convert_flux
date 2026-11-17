@@ -82,8 +82,8 @@ def load_template_vega_spectrum():
 
 class VegaSpec:
     """
-    A class to be called on for any conversions involving Vega magnitudes. Returns
-        Vega's spectrum (wavelength, flux density)
+    A class that loads input file from user/ query from online catalogs and
+        returns Vega's spectrum (wavelength, flux density)
 
     Attributes:
         input_file (str, optional): path to spectrum file (FIT/FITS or TXT only)
@@ -93,18 +93,15 @@ class VegaSpec:
         Numpy array of Vega flux densities
     """
 
-    def __init__(self, input_wavelengths=None, catalog=None, input_file_path=None):
+    def __init__(self, catalog=None, input_file_path=None):
         """
         Initialize the class
         Args:
-            input_wavelengths (numpy array of astropy Quantities): wavelengths where to
-                find Vega's flux density
             input_file_path (str, optional): path to spectrum file
             catalog (str, optional): catalog to query spectrum file from
         """
         self.catalog = catalog
         self.input_file = input_file_path
-        self.wanted_wavelengths = input_wavelengths
 
         return
 
@@ -176,6 +173,10 @@ class VegaSpec:
                     )
             except hdul_idx is None:
                 raise KeyError("Please provide index of HDUL with spectrum data.")
+            except KeyError:
+                raise KeyError(
+                    "Please specify keywords for wavelength and/or flux density. "
+                )
 
         # Work on TXT file
         elif extension == ".txt":
@@ -242,6 +243,5 @@ def spectral_density_vega(vega_spectrum, spectral_coordinates):
 wavelength, flux_density = VegaSpec().spectra()
 print(flux_density)
 vega_fd = spectral_density_vega(
-    vega_spectrum=(wavelength, flux_density), wavelengths=[1500] * (u.AA)
+    vega_spectrum=VegaSpec().spectra(), spectral_coordinates=[1500] * (u.AA)
 )
-print(vega_fd)
