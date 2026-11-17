@@ -171,7 +171,5 @@ dist_glob_patterns = ["dist/*"]
 upload_to_vcs_release = true
 
 # Add STIS Vega spectrum FITS file
-[tool.setuptools]
-include-package-data=true
 [tool.setuptools.package-data]
 "convert_flux"=["convert_flux/vega_spectra/*.FITS"]
