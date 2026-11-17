@@ -115,27 +115,3 @@ class Mag:
         # Convert from input magnitude to output magnitude
         input_fd = quantity.to(u.erg / u.s / u.cm**2 / u.AA, equivalencies=input_equiv)
         self.quantity = input_fd.to(chosen_mag_system, equivalencies=output_equiv)
-
-        # if quantity.unit == VEGAMAG:
-        #     ## Do something once we have SourceSpectrum class ready
-        #     ## Look at synphot conversion. Slack Noah after changes
-        #     return
-        # elif chosen_mag_system == VEGAMAG:
-        #     ## Do something once we have SourceSpectrum class ready
-        #     ## Look at synphot conversion. Slack Noah after changes
-        #     fd = quantity.to(
-        #         u.erg / u.s / u.cm**2 / u.AA, equivalencies=vega_equivalency
-        #     )
-
-        # # Convert from non-Vega magnitude to AB magnitude by default
-        # # or (non-Vega) user-specified system
-        # else:
-        #     if chosen_mag_system is not None:
-        #         self.quantity = quantity.to(
-        #             chosen_mag_system,
-        #             equivalencies=u.spectral_density(spectral_coordinate),
-        #         )
-        #     else:
-        #         self.quantity = quantity.to(
-        #             u.ABmag, equivalencies=u.spectral_density(spectral_coordinate)
-        #         )
