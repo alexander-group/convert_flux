@@ -19,9 +19,6 @@ class VegaMagFluxDensityEquivalency(Equivalency):
         (Super) initialize the class
         Args:
             vega_fd (astropy Quantity): Vega's flux density at specified wavelength
-        Raises:
-            UnitConversionError: If input flux density and Vega's flux density are not
-                equivalent astropy Quantities (e.g., wavelength and frequency-based)
         """
 
         # Define forward (mag -> flux_density) and
@@ -112,6 +109,7 @@ class Mag:
             else u.spectral_density(spectral_coordinate)
         )
 
-        # Convert from input magnitude to output magnitude
-        input_fd = quantity.to(u.erg / u.s / u.cm**2 / u.AA, equivalencies=input_equiv)
-        self.quantity = input_fd.to(chosen_mag_system, equivalencies=output_equiv)
+        # Convert from input magnitude to output magnitude through flux density
+        self.quantity = quantity.to(
+            u.erg / u.s / u.cm**2 / u.AA, equivalencies=input_equiv
+        ).to(chosen_mag_system, equivalencies=output_equiv)
