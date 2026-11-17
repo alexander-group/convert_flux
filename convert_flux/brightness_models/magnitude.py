@@ -5,7 +5,6 @@ import numpy as np
 from ..vega import VegaSpec, spectral_density_vega
 
 
-# Define the equivalency between magnitudes and flux densities for Vega system
 class VegaMagFluxDensityEquivalency(Equivalency):
     """
     Custom equivalency between Vega magnitude and flux density
