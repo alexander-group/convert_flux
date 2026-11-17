@@ -7,10 +7,24 @@ from convert_flux.convert_flux_units import VEGAMAG
 
 # Test if astropy quantity is created
 def test_mag_quantity_created():
-    mag1 = Mag(quantity=17.0 * u.STmag, spectral_coordinate=5500 * u.Angstrom)
-    mag2 = Mag(quantity=17.2 * u.STmag, spectral_coordinate=5750 * u.Angstrom)
+    mag1 = Mag(
+        quantity=17.0 * u.STmag,
+        spectral_coordinate=5500 * u.Angstrom,
+        chosen_mag_system=VEGAMAG,
+    )
+    mag2 = Mag(
+        quantity=17.2 * u.STmag,
+        spectral_coordinate=5750 * u.Angstrom,
+        chosen_mag_system=u.STmag,
+    )
+    mag3 = Mag(
+        quantity=17.2 * VEGAMAG,
+        spectral_coordinate=5750 * u.Angstrom,
+        chosen_mag_system=u.ABmag,
+    )
     assert isinstance(mag1, Mag)
     assert isinstance(mag2, Mag)
+    assert isinstance(mag3, Mag)
 
 
 # Test if Magnitude is an astropy Magnitude
