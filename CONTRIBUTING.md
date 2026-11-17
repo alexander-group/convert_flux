@@ -5,6 +5,7 @@ of many kinds. Our goal is to keep this a positive, inclusive, successful, and g
 
 ## Table of Contents
 
+- [Policy on AI Use](#policy-on-ai-use)
 - [Getting Started](#getting-started)
 - [Setting Up Your Development Environment](#setting-up-your-development-environment)
 - [Making Changes](#making-changes)
@@ -15,6 +16,21 @@ of many kinds. Our goal is to keep this a positive, inclusive, successful, and g
 - [Testing](#testing)
 - [Documentation](#documentation)
 - [Getting Help](#getting-help)
+
+## Policy on AI Use
+We welcome the use of AI assisted development. However, we ask that developers follow a set of guidelines 
+to ensure the safe and documented use of AI. This is primarily motivated by the AAS Journal guidelines on
+AI use, which require the disclosure of models used when submitting a journal. The guidlines are as follows:
+
+1. *All AI use should be closely monitored*. AI makes mistakes, especially when it does not understand the 
+   full context of the project. If you are using a chatbot, carefully read it's suggestion before copy and
+   pasting it into the codebase. If using an agent, ensure your `AGENT.md` file encourages frequent questions
+   and careful implementation.
+2. *All AI models used should be included as authors on commits when possible*. This is important for us to track the 
+   contributions of AI vs. humans in the code, including in the commit history and git blame. If an AI was used in
+   chatbot mode and cannot commit directly to the repo, it should be explicitly mentioned in the commit 
+   which AI model was used using the following format (which will insert the co-author statement in  a new paragraph): 
+   `git commit -m "implement feature xyz" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`.
 
 ## Getting Started
 
