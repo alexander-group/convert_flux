@@ -1,8 +1,8 @@
 import astropy.units as u
 from astropy.units import Equivalency
-from ..convert_flux_units import VEGAMAG
+from ..utils.convert_flux_units import VEGAMAG
 import numpy as np
-from ..vega import VegaSpec, spectral_density_vega
+from ..utils.vega import VegaSpec, spectral_density_vega
 
 
 class VegaMagFluxDensityEquivalency(Equivalency):

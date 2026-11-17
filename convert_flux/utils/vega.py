@@ -14,7 +14,9 @@ def load_template_vega_spectrum():
     Returns:
         NumPy arrays of astropy Quantities in order of (wavelength, flux_density)
     """
-    template_spectrum_path = Path("vega_spectra/alpha_lyr_stis_012_template.fits")
+    template_spectrum_path = Path(
+        "convert_flux/vega_spectra/alpha_lyr_stis_012_template.fits"
+    )
     hdul = fits.open(template_spectrum_path)
     data = hdul[1].data
 
