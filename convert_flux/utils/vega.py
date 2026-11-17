@@ -6,28 +6,6 @@ import numpy as np
 from pathlib import Path
 
 
-# Define the function to load our template HST/STIS Vega spectrum from CALSPEC
-def load_template_vega_spectrum():
-    """
-    This function loads the template HST/STIS CALSPEC Vega spectrum file
-        to avoid redundant disk I/O on repeated calls
-    Returns:
-        NumPy arrays of astropy Quantities in order of (wavelength, flux_density)
-    """
-    template_spectrum_path = Path(
-        "convert_flux/vega_spectra/alpha_lyr_stis_012_template.fits"
-    )
-    hdul = fits.open(template_spectrum_path)
-    data = hdul[1].data
-
-    ## Convert both wavelength and flux to astropy Quantities
-    ## Wavelength is in Angstrom, flux density is in erg / (s cm^2 Angstrom)
-    wavelength = u.Quantity(np.array(data["WAVELENGTH"]), unit=u.AA)
-    flux_density = u.Quantity(np.array(data["FLUX"]), unit=u.erg / u.s / u.cm**2 / u.AA)
-
-    return wavelength, flux_density
-
-
 class VegaSpec:
     """
     A class that loads input file from user/ query from online catalogs and
@@ -52,6 +30,29 @@ class VegaSpec:
         self.input_file = input_file_path
 
         return
+
+    # Define the function to load our template HST/STIS Vega spectrum from CALSPEC
+    def load_template_vega_spectrum(self):
+        """
+        This function loads the template HST/STIS CALSPEC Vega spectrum file
+            to avoid redundant disk I/O on repeated calls
+        Returns:
+            NumPy arrays of astropy Quantities in order of (wavelength, flux_density)
+        """
+        template_spectrum_path = Path(
+            "convert_flux/vega_spectra/alpha_lyr_stis_012_template.fits"
+        )
+        hdul = fits.open(template_spectrum_path)
+        data = hdul[1].data
+
+        ## Convert both wavelength and flux to astropy Quantities
+        ## Wavelength is in Angstrom, flux density is in erg / (s cm^2 Angstrom)
+        wavelength = u.Quantity(np.array(data["WAVELENGTH"]), unit=u.AA)
+        flux_density = u.Quantity(
+            np.array(data["FLUX"]), unit=u.erg / u.s / u.cm**2 / u.AA
+        )
+
+        return wavelength, flux_density
 
     def spectra(
         self,
@@ -91,7 +92,7 @@ class VegaSpec:
 
         # Return template spectrum if no file is specified
         if self.input_file is None:
-            return load_template_vega_spectrum()
+            return self.load_template_vega_spectrum()
 
         # Raise errors for missing information related to user input file
         if not wavelength_var_name or not fluxdensity_var_name:
