@@ -65,16 +65,6 @@ class VegaMagFluxDensityEquivalency(Equivalency):
         """
         return -2.5 * np.log10(flux_density / cls.vega_fd.value)
 
-    # Define the equivalency tuple
-    equivalency_tuple = [
-        (
-            VEGAMAG.physical_unit,
-            u.erg / u.s / u.cm**2 / u.AA,
-            vegamag_to_fd,
-            fd_to_vegamag,
-        )
-    ]
-
 
 class Mag:
     """
