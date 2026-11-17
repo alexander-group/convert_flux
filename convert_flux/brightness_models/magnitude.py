@@ -47,7 +47,9 @@ class VegaMagFluxDensityEquivalency(Equivalency):
             return -2.5 * np.log10(flux_density / self.vega_fd.value)
 
         # Define the equivalency tuple
-        equivalency_tuple = [(VEGAMAG, output_unit, vegamag_to_fd, fd_to_vegamag)]
+        equivalency_tuple = [
+            (VEGAMAG.physical_unit, output_unit, vegamag_to_fd, fd_to_vegamag)
+        ]
 
         # Initialize the parent Equivalency class with the list of conversion tuples
         super().__init__(
@@ -111,6 +113,5 @@ class Mag:
         )
 
         # Convert from input magnitude to output magnitude through flux density
-        self.quantity = quantity.to(
-            u.erg / u.s / u.cm**2 / u.AA, equivalencies=input_equiv
-        ).to(chosen_mag_system, equivalencies=output_equiv)
+        input_fd = quantity.to(u.erg / u.s / u.cm**2 / u.AA, equivalencies=input_equiv)
+        self.quantity = input_fd.to(chosen_mag_system, equivalencies=output_equiv)
