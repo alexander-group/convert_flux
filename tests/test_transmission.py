@@ -33,7 +33,8 @@ def test_validate_infer_filter_info_query():
     # mock infer_filter_info so the test doesn't query SVO
     wavelength = np.array([1000.0, 2000.0, 3000.0])
     transmission = np.array([0.1, 0.3, 0.5])
-    mock_query = MagicMock(return_value=(None, (wavelength, transmission)))
+    mean_wavelength = 2000.0
+    mock_query = MagicMock(return_value=(mean_wavelength, (wavelength, transmission)))
 
     with patch("convert_flux.utils.transmission.infer_filter_info", mock_query):
         curve = TransmissionCurve.from_filter("g", curve=None)
@@ -44,6 +45,7 @@ def test_validate_infer_filter_info_query():
     assert curve.wavelength.shape == curve.transmission.shape
     assert np.array_equal(curve.wavelength.value, wavelength)
     assert np.array_equal(curve.transmission, transmission)
+    assert curve.mean_wavelength == mean_wavelength * u.Angstrom
 
 
 def test_return_initial_curve_when_filter_not_found():

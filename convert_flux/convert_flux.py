@@ -3,6 +3,7 @@ import astropy.units as u
 
 from .brightness_models import Flux, FluxDensity, Luminosity, Mag
 from .converters import FluxFluxDensity, FluxLuminosity, MagFluxDensity
+from .utils import TransmissionCurve
 
 # Brightness quantities in the order the converters connect them. Each converter
 # links two neighbors: MagFluxDensity, FluxFluxDensity, then FluxLuminosity.
@@ -75,7 +76,10 @@ def _flux_density_to_flux(flux_density, context):
 def _flux_to_flux_density(flux, context):
     curve = context["transmission_curve"]
     return FluxFluxDensity(flux=flux).flux_to_fluxdensity(
-        curve.transmission, curve.wavelength, context["source_spec"]
+        curve.transmission,
+        curve.wavelength,
+        curve.mean_wavelength,
+        context["source_spec"],
     )
 
 
@@ -104,7 +108,9 @@ _STEPS = {
 def convert_flux(
     input_quantity,
     output_unit,
-    transmission_curve=None,
+    filter_name=None,
+    telescope=None,
+    instrument=None,
     source_spec_shape=None,
     distance=None,
     z=None,
@@ -120,22 +126,27 @@ def convert_flux(
     steps through mag -> flux density -> flux -> luminosity (or the reverse) and
     only uses the information each step needs.
 
-    A transmission curve is required for any conversion that involves a magnitude
-    or a flux density, because it sets the reference wavelength and the filter
-    used between flux density and flux. No transmission curve is assumed by
-    default. To use a flat transmission curve, the user must choose it explicitly.
-    The source spectrum shape (flat, Lyman alpha break, or polynomial) is also used
-    for conversions between flux density and flux. If no source spectrum shape is
+    A filter is required for any conversion that involves a magnitude or a flux
+    density, because its transmission curve sets the reference wavelength (the
+    filter's mean wavelength) and the filter used between flux density and flux.
+    The filter is looked up with infer_filter_info, which queries the SVO Filter
+    Profile Service, using the same filter_name, telescope, and instrument
+    arguments. No transmission curve is assumed by default. The source spectrum
+    shape (flat, Lyman alpha break, or polynomial) is also used for conversions
+    between flux density and flux. If no source spectrum shape is
     given, a flat source spectrum is assumed. A distance or a redshift is required
     for conversions between flux and luminosity.
 
     Args:
         input_quantity: The quantity to convert, including its value and units.
         output_unit: The desired output unit for the conversion.
-        transmission_curve: The transmission curve of the filter. Required for
-            conversions that involve a magnitude or a flux density, unless astropy
-            can convert the units directly. A flat transmission curve must be
-            chosen explicitly; it is not the default.
+        filter_name: The filter name, for example "r". Required for conversions
+            that involve a magnitude or a flux density, unless astropy can convert
+            the units directly.
+        telescope: The telescope name, for example "SLOAN" or "Palomar". Passed to
+            infer_filter_info.
+        instrument: The instrument name, for example "SDSS" or "ZTF". Passed to
+            infer_filter_info.
         source_spec_shape: The shape of the source spectrum. Defaults to a flat
             source spectrum.
         distance: The distance to the source. Used for conversions between flux
@@ -151,8 +162,9 @@ def convert_flux(
     Raises:
         TypeError: If the input quantity is not an astropy Quantity.
         ValueError: If the input quantity or the output unit is not a supported
-            brightness unit, if the conversion needs a transmission curve and none
-            is given, or if it needs a distance or redshift and neither is given.
+            brightness unit, if the conversion needs a filter and none is given,
+            or if it needs a distance or redshift and neither is given.
+        TransmissionCurveError: If no transmission curve is found for the filter.
     """
     if not isinstance(input_quantity, u.Quantity):
         raise TypeError("input_quantity must be an astropy Quantity.")
@@ -173,15 +185,15 @@ def convert_flux(
         path = _CHAIN[index_out : index_in + 1][::-1]
 
     # Check that every step on the path has what it needs
+    transmission_curve = None
     ref_wavelength = None
     if "mag" in path or "flux_density" in path:
-        if transmission_curve is None:
-            raise ValueError(
-                f"Converting {kind_in} to {kind_out} needs a transmission_curve."
-            )
-        # Same reference wavelength as FluxFluxDensity.flux_to_fluxdensity
-        wavelength = transmission_curve.wavelength
-        ref_wavelength = (wavelength.min() + wavelength.max()) / 2
+        if filter_name is None:
+            raise ValueError(f"Converting {kind_in} to {kind_out} needs a filter_name.")
+        transmission_curve = TransmissionCurve.from_filter(
+            filter_name, telescope=telescope, instrument=instrument
+        )
+        ref_wavelength = transmission_curve.mean_wavelength
 
     if "flux" in path and "luminosity" in path and distance is None and z is None:
         raise ValueError(

@@ -30,7 +30,9 @@ class FluxFluxDensity:
         self.flux = flux
         self.fd = flux_density
 
-    def flux_to_fluxdensity(self, transmission, wavelength, source_spec=None):
+    def flux_to_fluxdensity(
+        self, transmission, wavelength, mean_wavelength, source_spec=None
+    ):
         """
         Convert Flux to FluxDensity object using the provided source spectrum and
         transmission curve.
@@ -39,6 +41,8 @@ class FluxFluxDensity:
             transmission: The transmission array from TransmissionCurve (dimensionless).
             wavelength: The wavelength array corresponding to the overlapping ranges of
             source_flux and transmission (in Angstrom).
+            mean_wavelength: The mean wavelength of the filter from TransmissionCurve.
+            The flux density is given at this wavelength.
             source_spec: SourceSpec instance. Defaults to FlatSpec.
 
         """
@@ -49,8 +53,7 @@ class FluxFluxDensity:
 
         flux_density = self.flux.quantity / delta_nu
 
-        ref_wavelength = (wavelength.min() + wavelength.max()) / 2
-        return FluxDensity(flux_density, ref_wavelength)
+        return FluxDensity(flux_density, mean_wavelength)
 
     def flux_density_to_flux(self, transmission, wavelength, source_spec=None):
         """

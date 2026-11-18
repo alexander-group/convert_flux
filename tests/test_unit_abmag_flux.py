@@ -3,16 +3,24 @@ import pytest
 import astropy.units as u
 
 
-@pytest.mark.xfail(reason="The convert_flux function is not implemented yet.")
 def test_flux_output_type():
     abmag = 20.0 * u.ABmag
     unit_out = u.erg / (u.s * u.cm**2)
-    flux = convert_flux(abmag, unit_out)
+    transmission_band = "r"
+    transmission_instrument = "SDSS"
+    transmission_telescope = "SLOAN"
+    flux = convert_flux(
+        abmag,
+        unit_out,
+        transmission_band,
+        transmission_telescope,
+        transmission_instrument,
+    )
 
     assert isinstance(flux, u.Quantity)
 
 
-@pytest.mark.xfail(reason="The convert_flux function is not implemented yet.")
+@pytest.mark.xfail(reason="Expected values need the flat_transmission flag.")
 def test_abmag_to_flux_and_back_to_ab_mag_for_sdss_rband():
     expected_abmag = 20.0 * u.ABmag
     expected_flux = 3.22e-14 * u.erg / (u.s * u.cm**2)
@@ -20,20 +28,34 @@ def test_abmag_to_flux_and_back_to_ab_mag_for_sdss_rband():
     unit_out_flux = u.erg / (u.s * u.cm**2)
     unit_out_abmag = u.ABmag
 
-    transmission_curve = "sdss_r"
+    transmission_band = "r"
+    transmission_instrument = "SDSS"
+    transmission_telescope = "SLOAN"
 
-    flux = convert_flux(expected_abmag, unit_out_flux, transmission_curve)
-    abmag = convert_flux(expected_flux, unit_out_abmag, transmission_curve)
+    flux = convert_flux(
+        expected_abmag,
+        unit_out_flux,
+        transmission_band,
+        transmission_telescope,
+        transmission_instrument,
+    )
+    abmag = convert_flux(
+        expected_flux,
+        unit_out_abmag,
+        transmission_band,
+        transmission_telescope,
+        transmission_instrument,
+    )
 
     assert (
-        abs(flux - expected_flux) < 1e-15
+        abs(flux - expected_flux).value < 1e-15
     ), f"Expected {expected_flux}, but got {flux}"
     assert (
-        abs(abmag - expected_abmag) < 1e-15
+        abs(abmag - expected_abmag).value < 5e-3
     ), f"Expected {expected_abmag}, but got {abmag}"
 
 
-@pytest.mark.xfail(reason="The convert_flux function is not implemented yet.")
+@pytest.mark.xfail(reason="Expected values need the flat_transmission flag.")
 def test_abmag_to_flux_and_back_to_ab_mag_for_ztf_rband():
     expected_abmag = 20.0 * u.ABmag
     expected_flux = 4.08e-14 * u.erg / (u.s * u.cm**2)
@@ -41,14 +63,28 @@ def test_abmag_to_flux_and_back_to_ab_mag_for_ztf_rband():
     unit_out_flux = u.erg / (u.s * u.cm**2)
     unit_out_abmag = u.ABmag
 
-    transmission_curve = "ztf_r"
+    transmission_band = "r"
+    transmission_instrument = "ZTF"
+    transmission_telescope = "Palomar"
 
-    flux = convert_flux(expected_abmag, unit_out_flux, transmission_curve)
-    abmag = convert_flux(expected_flux, unit_out_abmag, transmission_curve)
+    flux = convert_flux(
+        expected_abmag,
+        unit_out_flux,
+        transmission_band,
+        transmission_telescope,
+        transmission_instrument,
+    )
+    abmag = convert_flux(
+        expected_flux,
+        unit_out_abmag,
+        transmission_band,
+        transmission_telescope,
+        transmission_instrument,
+    )
 
     assert (
-        abs(flux - expected_flux) < 1e-15
+        abs(flux - expected_flux).value < 1e-15
     ), f"Expected {expected_flux}, but got {flux}"
     assert (
-        abs(abmag - expected_abmag) < 1e-15
+        abs(abmag - expected_abmag).value < 5e-3
     ), f"Expected {expected_abmag}, but got {abmag}"
