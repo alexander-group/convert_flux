@@ -2,7 +2,7 @@ import astropy.units as u
 from astropy.units import Equivalency
 from ..utils.convert_flux_units import VEGAMAG
 import numpy as np
-from ..utils.vega import VegaSpec, spectral_density_vega
+from ..utils.vega import VegaSpec
 
 
 class VegaMagFluxDensityEquivalency(Equivalency):
@@ -78,13 +78,26 @@ class Mag:
             Default is ABmag.
     """
 
-    def __init__(self, quantity, spectral_coordinate, chosen_mag_system=u.ABmag):
+    def __init__(
+        self,
+        quantity,
+        spectral_coordinate,
+        chosen_mag_system=u.ABmag,
+        catalog=None,
+        input_file_path=None,
+        **spectra_kwargs,
+    ):
         """
         Initialize the Mag class
         Args:
             quantity: input magnitudes
             spectral_coordinate: input central wavelength
             chosen_mag_system: magnitude system to convert to.
+            input_file_path (str, optional): path to spectrum file
+            catalog (str, optional): catalog to query spectrum file from
+            **spectra_kwargs: Additional keyword arguments forwarded to
+                `VegaSpec.spectra()`: `wavelength_var_name`, `fluxdensity_var_name`,
+                `hdul_idx`, `wavelength_unit`, `fluxdensity_unit`
         Raises:
             TypeError: If quantity or spectral_coordinate is not astropy Quantity
         """
@@ -103,8 +116,9 @@ class Mag:
             raise TypeError("Input spectral_coordinate must be astropy Quantity")
 
         # Define a custom equivalency for conversions involving Vega magnitudes
-        wanted_vega_fd = spectral_density_vega(
-            vega_spectrum=VegaSpec().spectra(), spectral_coordinates=spectral_coordinate
+        vega_spec = VegaSpec(catalog=catalog, input_file_path=input_file_path)
+        wanted_vega_fd = vega_spec.spectral_density_vega(
+            spectral_coordinates=spectral_coordinate
         )
         vega_equivalency = VegaMagFluxDensityEquivalency(wanted_vega_fd)
 

@@ -135,7 +135,14 @@ class VegaSpec:
 
         return self._standardize_units(wavelength, flux_density)
 
-    def spectral_density_vega(self, spectral_coordinates, **spectra_kwargs):
+    @classmethod
+    def spectral_density_vega(
+        cls,
+        spectral_coordinates,
+        catalog=None,
+        input_file_path=None,
+        **spectra_kwargs,
+    ):
         """Finds Vega flux densities at specified spectral coordinates
 
         Args:
@@ -147,7 +154,8 @@ class VegaSpec:
         Returns:
             astropy.units.Quantity: Vega flux density
         """
-        vega_spectral_coord, vega_fd = self.spectra(**spectra_kwargs)
+        instance = cls(catalog=catalog, input_file_path=input_file_path)
+        vega_spectral_coord, vega_fd = instance.spectra(**spectra_kwargs)
 
         converted_spectral_coordinates = u.Quantity(spectral_coordinates).to(
             vega_spectral_coord.unit,
