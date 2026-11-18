@@ -14,9 +14,26 @@ class VegaSpec:
     Attributes:
         input_file (str, optional): path to spectrum file (FIT/FITS or TXT only)
         catalog (str, optional): catalog to query spectrum file from
+        wavelength_var_name (str, optional): variable for wavelength in
+            spectrum file. Must be provided if input_file_path is not None
+        fluxdensity_var_name (str, optional): variable for flux density in
+            spectrum file. Must be provided if input_file_path is not None
+        hdul_idx (int, optional): index of HDUL in FIT/FITS file with spectrum data.
+            Must be provided if input file is .fit/.fits file
+        wavelength_unit (astropy Units, optional): Wavelength unit in
+            spectrum file. Must be provided if input_file_path is not None
+        fluxdensity_var_name (astropy Units, optional): Flux density unit in
+            spectrum file. Must be provided if input_file_path is not None
 
     Returns:
         Numpy array of Vega flux densities
+
+    Raises:
+        ValueError: if the input spectrum file is not FIT/FITS or TXT file
+        KeyError: if the keywords for wavelength/ flux density or index of HDUL (of
+            FIT/FITS file) with spectru data is missing
+        AttributeError: if astropy Units for wavelength or flux density in
+            spectrum file is missing.
     """
 
     def __init__(self, catalog=None, input_file_path=None):
@@ -65,23 +82,16 @@ class VegaSpec:
             or TXT file and returns the wavelength and flux values of the  spectrum
         Args:
             wavelength_var_name (str, optional): variable for wavelength in
-                spectrum file. Must be provided if input_file_path is not None
+                spectrum file.
             fluxdensity_var_name (str, optional): variable for flux density in
-                spectrum file. Must be provided if input_file_path is not None
+                spectrum file.
             hdul_idx (int, optional): index of HDUL in FIT/FITS file with spectrum data.
-                Must be provided if input file is .fit/.fits file
             wavelength_unit (astropy Units, optional): Wavelength unit in
-                spectrum file. Must be provided if input_file_path is not None
+                spectrum file.
             fluxdensity_var_name (astropy Units, optional): Flux density unit in
-                spectrum file. Must be provided if input_file_path is not None
+                spectrum file.
         Returns:
             A tuple of two NumPy arrays (wavelength, flux) of astropy quantities
-        Raises:
-            ValueError: if the input spectrum file is not FIT/FITS or TXT file
-            KeyError: if the keywords for wavelength/ flux density or index of HDUL (of
-                FIT/FITS file) with spectru data is missing
-            AttributeError: if astropy Units for wavelength or flux density in
-                spectrum file is missing.
         """
         # Catalog querying is not supported right now.
         # Come back to this after pitch.
