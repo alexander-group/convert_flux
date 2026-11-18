@@ -135,12 +135,10 @@ class VegaSpec:
 
         return self._standardize_units(wavelength, flux_density)
 
-    @classmethod
+    # @classmethod
     def spectral_density_vega(
-        cls,
+        self,
         spectral_coordinates,
-        catalog=None,
-        input_file_path=None,
         **spectra_kwargs,
     ):
         """Finds Vega flux densities at specified spectral coordinates
@@ -154,21 +152,25 @@ class VegaSpec:
         Returns:
             astropy.units.Quantity: Vega flux density
         """
-        instance = cls(catalog=catalog, input_file_path=input_file_path)
-        vega_spectral_coord, vega_fd = instance.spectra(**spectra_kwargs)
+        vega_spectral_coord, vega_fd = self.spectra(
+            self.input_file, self.catalog, **spectra_kwargs
+        )
 
+        # Convert the spectrum's spectral coordinate to be the same as
+        # the wanted spectral coordinate
         converted_spectral_coordinates = u.Quantity(spectral_coordinates).to(
             vega_spectral_coord.unit,
             equivalencies=u.spectral_density(vega_spectral_coord),
         )
 
+        # Create a 2-D pairwise difference matrix and find the wanted flux density
         diff_matrix = np.abs(
             vega_spectral_coord[None, :]
             - np.atleast_1d(converted_spectral_coordinates)[:, None]
         )
         wanted_idx = np.argmin(diff_matrix, axis=1)
-
         result = vega_fd[wanted_idx]
+
         return result
 
     @staticmethod
@@ -228,12 +230,11 @@ class VegaSpec:
         )
         return wavelength, flux_density
 
-    @classmethod
-    def _standardize_units(cls, wavelength, flux_density):
+    def _standardize_units(self, wavelength, flux_density):
         """Converts flux density to erg / (s cm^2 Angstrom) if needed."""
-        if flux_density.unit != cls.STANDARD_FLUX_UNIT:
+        if flux_density.unit != u.erg / u.s / u.cm**2 / u.AA:
             flux_density = flux_density.to(
-                cls.STANDARD_FLUX_UNIT,
+                u.erg / u.s / u.cm**2 / u.AA,
                 equivalencies=u.spectral_density(wavelength),
             )
         return wavelength, flux_density

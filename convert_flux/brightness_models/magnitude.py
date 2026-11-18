@@ -108,7 +108,9 @@ class Mag:
             raise TypeError("Input spectral_coordinate must be astropy Quantity")
 
         # Define a custom equivalency for conversions involving Vega magnitudes
-        vega_spec = VegaSpec(catalog=catalog, input_file_path=input_file_path)
+        vega_spec = VegaSpec(
+            catalog=catalog, input_file_path=input_file_path, **spectra_kwargs
+        )
         wanted_vega_fd = vega_spec.spectral_density_vega(
             spectral_coordinates=spectral_coordinate
         )
