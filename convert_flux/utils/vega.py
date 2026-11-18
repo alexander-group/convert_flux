@@ -88,6 +88,7 @@ class VegaSpec:
         if self.catalog is not None:
             raise NotImplementedError("Query option is not supported currently.")
 
+        # Return Vega template spectrum if user does not input their own file
         if self.input_file is None:
             return self.load_template_vega_spectrum()
 
