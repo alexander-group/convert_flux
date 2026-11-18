@@ -68,6 +68,11 @@ class Mag:
         spectral_coordinate (astropy Quantity): central wavelength/frequency
         chosen_mag_system (astropy Units): Magnitude system to convert to.
             Default is ABmag.
+        input_file_path (str, optional): path to spectrum file
+        catalog (str, optional): catalog to query spectrum file from
+        **spectra_kwargs: Additional keyword arguments forwarded to
+            `VegaSpec.spectra()`: `wavelength_var_name`, `fluxdensity_var_name`,
+            `hdul_idx`, `wavelength_unit`, `fluxdensity_unit`
 
     Raises:
         TypeError: if input quantity and/or spectral coordinates
@@ -84,18 +89,7 @@ class Mag:
         input_file_path=None,
         **spectra_kwargs,
     ):
-        """
-        Initialize the Mag class
-        Args:
-            quantity: input magnitudes
-            spectral_coordinate: input central wavelength
-            chosen_mag_system: magnitude system to convert to.
-            input_file_path (str, optional): path to spectrum file
-            catalog (str, optional): catalog to query spectrum file from
-            **spectra_kwargs: Additional keyword arguments forwarded to
-                `VegaSpec.spectra()`: `wavelength_var_name`, `fluxdensity_var_name`,
-                `hdul_idx`, `wavelength_unit`, `fluxdensity_unit`
-        """
+        """Initialize the Mag class"""
         # Check if input magnitudes are astropy Quantities
         if not isinstance(quantity, u.Quantity):
             raise TypeError("Input magnitude must be astropy Quantity")
