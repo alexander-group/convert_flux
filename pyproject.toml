@@ -172,4 +172,4 @@ upload_to_vcs_release = true
 
 # Add STIS Vega spectrum FITS file
 [tool.setuptools.package-data]
-"convert_flux"=["convert_flux/vega_spectra/*.FITS"]
+convert_flux=["vega_spectra/*"]
