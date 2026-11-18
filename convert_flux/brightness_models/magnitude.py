@@ -13,16 +13,10 @@ class VegaMagFluxDensityEquivalency(Equivalency):
         vega_fd (astropy Quantity): Vega's flux density
     """
 
-    vega_fd = None
-
     def __init__(self, vega_fd):
         """Initialize the equivalency with Vega's zero-point flux density."""
         self.vega_fd = vega_fd
         self.output_unit = vega_fd.unit
-
-        # Store on the class so @classmethod callbacks can access cls.vega_fd
-        type(self).vega_fd = vega_fd.to(self.output_unit)
-        self.vega_fd = type(self).vega_fd
 
         # Define the equivalency tuple
         equivalency_tuple = [
@@ -40,8 +34,7 @@ class VegaMagFluxDensityEquivalency(Equivalency):
         )
 
     # Define the forward (mag -> flux_density) conversion
-    @classmethod
-    def vegamag_to_fd(cls, vega_mag):
+    def vegamag_to_fd(self, vega_mag):
         """
         This function converts from Vega magnitude to flux density
         Args:
@@ -50,11 +43,10 @@ class VegaMagFluxDensityEquivalency(Equivalency):
         Returns:
             Flux density as floats
         """
-        return cls.vega_fd.value * (10 ** (-0.4 * vega_mag))
+        return self.vega_fd.value * (10 ** (-0.4 * vega_mag))
 
     # Define the backward (flux_density -> mag) conversion
-    @classmethod
-    def fd_to_vegamag(cls, flux_density):
+    def fd_to_vegamag(self, flux_density):
         """
         This function converts from flux density to Vega magnitude
         Args:
@@ -63,7 +55,7 @@ class VegaMagFluxDensityEquivalency(Equivalency):
         Returns:
             Vega magnitude as floats
         """
-        return -2.5 * np.log10(flux_density / cls.vega_fd.value)
+        return -2.5 * np.log10(flux_density / self.vega_fd.value)
 
 
 class Mag:
