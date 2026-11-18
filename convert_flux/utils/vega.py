@@ -88,9 +88,6 @@ class VegaSpec:
         if self.catalog is not None:
             raise NotImplementedError("Query option is not supported currently.")
 
-        if self.catalog is not None:
-            raise NotImplementedError("Query option is not supported currently.")
-
         if self.input_file is None:
             return self.load_template_vega_spectrum()
 
@@ -135,7 +132,6 @@ class VegaSpec:
 
         return self._standardize_units(wavelength, flux_density)
 
-    # @classmethod
     def spectral_density_vega(
         self,
         spectral_coordinates,
