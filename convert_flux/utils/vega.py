@@ -227,7 +227,8 @@ class VegaSpec:
         )
         return wavelength, flux_density
 
-    def _standardize_units(self, wavelength, flux_density):
+    @staticmethod
+    def _standardize_units(wavelength, flux_density):
         """Converts flux density to erg / (s cm^2 Angstrom) if needed."""
         if flux_density.unit != u.erg / u.s / u.cm**2 / u.AA:
             flux_density = flux_density.to(
