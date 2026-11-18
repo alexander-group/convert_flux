@@ -72,7 +72,8 @@ class Mag:
         catalog (str, optional): catalog to query spectrum file from
         **spectra_kwargs: Additional keyword arguments forwarded to
             `VegaSpec.spectra()`: `wavelength_var_name`, `fluxdensity_var_name`,
-            `hdul_idx`, `wavelength_unit`, `fluxdensity_unit`
+            `hdul_idx`, `wavelength_unit`, `fluxdensity_unit`. See definition for each
+            of them in docstrings of VegaSpec class.
 
     Raises:
         TypeError: if input quantity and/or spectral coordinates
