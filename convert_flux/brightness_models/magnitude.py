@@ -68,6 +68,11 @@ class Mag:
         spectral_coordinate (astropy Quantity): central wavelength/frequency
         chosen_mag_system (astropy Units): Magnitude system to convert to.
             Default is ABmag.
+
+    Raises:
+        TypeError: if input quantity and/or spectral coordinates
+            are not astropy Quantities
+        UnitConversionError: if input quantity is not AB, ST, or Vega magnitudes
     """
 
     def __init__(
@@ -90,8 +95,6 @@ class Mag:
             **spectra_kwargs: Additional keyword arguments forwarded to
                 `VegaSpec.spectra()`: `wavelength_var_name`, `fluxdensity_var_name`,
                 `hdul_idx`, `wavelength_unit`, `fluxdensity_unit`
-        Raises:
-            TypeError: If quantity or spectral_coordinate is not astropy Quantity
         """
         # Check if input magnitudes are astropy Quantities
         if not isinstance(quantity, u.Quantity):
