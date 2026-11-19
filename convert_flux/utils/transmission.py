@@ -82,7 +82,7 @@ class FlatTransmissionCurve(TransmissionCurve):
     A class that defines a flat transmission curve, subclass of TransmissionCurve.
     """
 
-    def __init__(self, lambda_min, lambda_max, num_points=1000):
+    def __init__(self, lambda_min, lambda_max, num_points=1000, transmission_max=1.0):
         """
         Initialize FlatTransmissionCurve class with wavelength array.
 
@@ -90,5 +90,5 @@ class FlatTransmissionCurve(TransmissionCurve):
             wavelength (u.Quantity): Wavelength array in astropy units.
         """
         wavelength = np.linspace(lambda_min, lambda_max, num_points) * u.AA
-        transmission = np.ones_like(wavelength.value)
+        transmission = transmission_max * np.ones_like(wavelength.value)
         super().__init__(wavelength, transmission)
