@@ -28,6 +28,14 @@ Entries are written by the AI tool at the end of a task (see
 
 ## Contributions
 
+### `1-implement-queries-to-the-infer_filter_info-package`
+
+*Started 2026-11. Pull request:
+[#34](https://github.com/alexander-group/convert_flux/pull/34).*
+
+- **Code** (Claude Opus 5.5): Wrote `test_validate_infer_filter_info_query`, which uses
+  `MagicMock` to stand in for `infer_filter_info` so the test doesn't query SVO.
+
 ### `33-tracking-ai-usage`
 
 *Started 2026-11. Pull request: TBD.*

@@ -3,6 +3,7 @@ import astropy.units as u
 import numpy as np
 
 from convert_flux.utils import TransmissionCurve
+from convert_flux.utils.transmission import FlatTransmissionCurve
 from unittest.mock import MagicMock, patch
 
 
@@ -63,6 +64,6 @@ def test_flat_curve_must_be_explicit_when_filter_not_found():
 
 def test_flat_curve():
     wavelength = [1000, 2000, 3000] * u.nm
-    flat = TransmissionCurve(wavelength, np.ones(wavelength.shape))
+    flat = FlatTransmissionCurve(lambda_min=1000, lambda_max=3000, num_points=3)
     curve = TransmissionCurve.from_filter("SDSS", curve=flat)
     assert np.array_equal(curve.transmission, np.ones(wavelength.shape))

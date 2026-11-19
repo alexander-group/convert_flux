@@ -48,7 +48,9 @@ class TransmissionCurve:
         self.mean_wavelength = mean_wavelength
 
     @staticmethod
-    def from_filter(filter_name, *args, curve=None, **kwargs):
+    def from_filter(
+        filter_name: str, *args, curve: np.ndarray = None, **kwargs
+    ) -> "TransmissionCurve":
         """
         Function to create a transmission curve from a filter name. Infers transmission
         curves from SVO using infer_filter_info as a query.
@@ -77,6 +79,21 @@ class TransmissionCurve:
             return curve
 
         wavelength, transmission = sens
-        return TransmissionCurve(
-            wavelength * u.AA, transmission, mean_wavelength * u.AA
-        )
+        return TransmissionCurve(wavelength * u.AA, transmission)
+
+
+class FlatTransmissionCurve(TransmissionCurve):
+    """
+    A class that defines a flat transmission curve, subclass of TransmissionCurve.
+    """
+
+    def __init__(self, lambda_min, lambda_max, num_points=1000, transmission_max=1.0):
+        """
+        Initialize FlatTransmissionCurve class with wavelength array.
+
+        Parameters:
+            wavelength (u.Quantity): Wavelength array in astropy units.
+        """
+        wavelength = np.linspace(lambda_min, lambda_max, num_points) * u.AA
+        transmission = transmission_max * np.ones_like(wavelength.value)
+        super().__init__(wavelength, transmission)
