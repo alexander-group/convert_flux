@@ -2,6 +2,97 @@
 
 <!-- version list -->
 
+## v0.2.1 (2026-11-19)
+
+### Bug Fixes
+
+- Added default of perfect transmission that user can lower if needed
+  ([`b0098f1`](https://github.com/alexander-group/convert_flux/commit/b0098f1caf020ab01fc0d42e45bbc16ffca7a616))
+
+- Data include command in pyproject.toml
+  ([`e21ddc3`](https://github.com/alexander-group/convert_flux/commit/e21ddc3bb19fbc7201d6dadbed628a77a3fd6176))
+
+### Build System
+
+- Added FlatTransmissionCurve subclass
+  ([`058a667`](https://github.com/alexander-group/convert_flux/commit/058a66760e75aac120fd6064e3f9d4698d007bdc))
+
+- Added FlatTransmissionCurve subclass
+  ([`9ed3008`](https://github.com/alexander-group/convert_flux/commit/9ed300870720a91cab7da3b1b6ef40c1cbccca6c))
+
+- Added resampling for wavelength & transmission when they are not the same
+  ([`8100002`](https://github.com/alexander-group/convert_flux/commit/81000024fa22507a464ec360b6b8360d0da8ec40))
+
+- Change from classmethod to regular method for Vega custom equivalency
+  ([`f38a8b5`](https://github.com/alexander-group/convert_flux/commit/f38a8b5c4645dbf15e8bb43729c2f541b075ab19))
+
+- Change template spectrum file location in pyproject.toml
+  ([`40b4373`](https://github.com/alexander-group/convert_flux/commit/40b4373ff6effda4cf16b0aa16074d5655748e15))
+
+- Implementing Vega magnitude
+  ([`3e814b9`](https://github.com/alexander-group/convert_flux/commit/3e814b983d50267277cf6edc897755476e4fb2c6))
+
+- Implementing Vega magnitude
+  ([`3e251b3`](https://github.com/alexander-group/convert_flux/commit/3e251b388fcfeb050a0c94f520a7208293ab959b))
+
+- Implementing Vega magnitude
+  ([`238dfe2`](https://github.com/alexander-group/convert_flux/commit/238dfe241a64c59878b63da0d122b71da3fa8922))
+
+- Improve VegaSpec class and custom equivalency for Vega magnitude
+  ([`f11d8cc`](https://github.com/alexander-group/convert_flux/commit/f11d8cc3f18aa42f91d2ae38581543c5f8f017af))
+
+- Improve VegaSpec class and custom equivalency for Vega magnitude
+  ([`87e6c45`](https://github.com/alexander-group/convert_flux/commit/87e6c459c297171076106aa074e5ff8514bfcc45))
+
+- Initial brainstorming idea for TransmissionCurve
+  ([`74c81a8`](https://github.com/alexander-group/convert_flux/commit/74c81a85aea9d30e143ba64317f2272ed1176b2e))
+
+- Initial TransmissionCurve class and unit tests. Moved wavelength & transmission is same size check
+  from FluxFluxDensity into TransmissionCurve.
+  ([`b968c21`](https://github.com/alexander-group/convert_flux/commit/b968c21a3fb5663107a7e1f9a29ac074c4f99309))
+
+- Magic mock infer_filter_info query
+  ([`3a348cc`](https://github.com/alexander-group/convert_flux/commit/3a348cccf53755f6975804a88debec895e155630))
+
+- Map VEGAMAG physical unit in the custom equivalency
+  ([`03337f8`](https://github.com/alexander-group/convert_flux/commit/03337f8fe78e8584365106e1a15c48ef91d62c1e))
+
+- Move template Vega spectrum to convert_flux directory
+  ([`0ccdfaa`](https://github.com/alexander-group/convert_flux/commit/0ccdfaab1dd493df9492b48d4062993a425a0785))
+
+- Update docstrings for Mag class
+  ([`bb28d87`](https://github.com/alexander-group/convert_flux/commit/bb28d87051d347905cbabb8ed274735717b78aaf))
+
+- Update docstrings for Mag class
+  ([`3a51ec4`](https://github.com/alexander-group/convert_flux/commit/3a51ec45826d45bbae1b09d259b89b05ec06a703))
+
+- Update docstrings for VegaSpec & Mag class
+  ([`c2d91f8`](https://github.com/alexander-group/convert_flux/commit/c2d91f87431636c67fda12c7c54e35501d155f6f))
+
+- Update docstrings for VegaSpec class
+  ([`585a43e`](https://github.com/alexander-group/convert_flux/commit/585a43e3ed7add6bc6302c6a5225f0abc4a9fa74))
+
+- Update methods for VegaSpec class
+  ([`dc3dd6b`](https://github.com/alexander-group/convert_flux/commit/dc3dd6b4a677a75c904191f2a936c8a5bf6abab8))
+
+- Update methods for VegaSpec class
+  ([`ea6d362`](https://github.com/alexander-group/convert_flux/commit/ea6d362627021b418eab8cea6f35f949b3480743))
+
+- Update methods for VegaSpec class
+  ([`59242d9`](https://github.com/alexander-group/convert_flux/commit/59242d9b4066fba07543d4e77ec1e769791a177f))
+
+- Update methods for VegaSpec class
+  ([`bfed53d`](https://github.com/alexander-group/convert_flux/commit/bfed53deb7a2f04ff98eed2590c9743463712f97))
+
+- Updates to custom equivalency for Vega magnitudes
+  ([`81cb096`](https://github.com/alexander-group/convert_flux/commit/81cb0969388712b70c5938b0df2063b9cf10ed13))
+
+### Documentation
+
+- Log AI contributions
+  ([`d6561e2`](https://github.com/alexander-group/convert_flux/commit/d6561e22091400303df5a9538c71b20100fb0da5))
+
+
 ## v0.2.0 (2026-11-16)
 
 ### Build System
