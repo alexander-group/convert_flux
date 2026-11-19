@@ -56,6 +56,8 @@ Entries are written by the AI tool at the end of a task (see
   arguments and each filter's mean wavelength from `infer_filter_info`.
 - **Refactoring** (Claude Opus 5.5): Updated imports and added `__init__.py` to resolve
   the new file structure.
+- **Debugging** (Claude Opus 5.5): Traced 7 pytest failures to a lost `mean_wavelength`
+  argument in `TransmissionCurve.from_filter` from a merge conflict and restored it.
 
 ### `25-add-and-improve-github-automation`
 

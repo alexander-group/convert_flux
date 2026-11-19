@@ -79,7 +79,9 @@ class TransmissionCurve:
             return curve
 
         wavelength, transmission = sens
-        return TransmissionCurve(wavelength * u.AA, transmission)
+        return TransmissionCurve(
+            wavelength * u.AA, transmission, mean_wavelength * u.AA
+        )
 
 
 class FlatTransmissionCurve(TransmissionCurve):
