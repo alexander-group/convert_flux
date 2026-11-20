@@ -1,0 +1,177 @@
+"""
+Tests for how convert_flux() identifies brightness quantities and chains the
+converters between them.
+"""
+
+from unittest.mock import MagicMock, patch
+
+import astropy.units as u
+import numpy as np
+import pytest
+
+from convert_flux import convert_flux
+from convert_flux.convert_flux import _brightness_kind
+from convert_flux.utils import VEGAMAG, TransmissionCurve
+
+FLUX_UNIT = u.erg / (u.s * u.cm**2)
+LUMINOSITY_UNIT = u.erg / u.s
+
+
+@pytest.mark.parametrize(
+    "unit, expected_kind",
+    [
+        (u.ABmag, "mag"),
+        (u.STmag, "mag"),
+        (VEGAMAG, "mag"),
+        (u.uJy, "flux_density"),
+        (u.erg / (u.s * u.cm**2 * u.Hz), "flux_density"),
+        (u.erg / (u.s * u.cm**2 * u.Angstrom), "flux_density"),
+        (u.W / (u.m**2 * u.nm), "flux_density"),
+        (u.erg / (u.s * u.cm**2), "flux"),
+        (u.W / u.m**2, "flux"),
+        (u.erg / u.s, "luminosity"),
+        (u.Lsun, "luminosity"),
+    ],
+    ids=[
+        "ABmag",
+        "STmag",
+        "VEGAMAG",
+        "uJy",
+        "fnu_cgs",
+        "flam_cgs",
+        "flam_si",
+        "flux_cgs",
+        "flux_si",
+        "luminosity_cgs",
+        "luminosity_lsun",
+    ],
+)
+def test_brightness_kind(unit, expected_kind):
+    assert _brightness_kind(unit) == expected_kind
+
+
+def test_brightness_kind_rejects_unsupported_unit():
+    with pytest.raises(ValueError):
+        _brightness_kind(u.km)
+
+
+def test_abmag_to_fnu_without_transmission_curve():
+    fnu = convert_flux(20.0 * u.ABmag, u.erg / (u.s * u.cm**2 * u.Hz))
+    expected = 3.631e-28 * u.erg / (u.s * u.cm**2 * u.Hz)
+
+    assert isinstance(fnu, u.Quantity)
+    assert abs(fnu - expected) / expected <= 1e-3, f"Expected {expected}, got {fnu}"
+
+
+def test_same_kind_unit_change():
+    flux = convert_flux(1.0 * u.W / u.m**2, FLUX_UNIT)
+    expected = 1000.0 * FLUX_UNIT
+
+    assert abs(flux - expected) / expected <= 1e-3, f"Expected {expected}, got {flux}"
+
+
+def test_flux_to_luminosity_with_distance():
+    flux = 3.21e-14 * FLUX_UNIT
+    luminosity = convert_flux(flux, LUMINOSITY_UNIT, distance=20 * u.Mpc)
+    expected = 1.536e39 * LUMINOSITY_UNIT
+
+    assert (
+        abs(luminosity - expected) / expected <= 1e-3
+    ), f"Expected {expected}, got {luminosity}"
+
+
+def test_luminosity_to_flux_round_trip():
+    luminosity = 1.54e39 * LUMINOSITY_UNIT
+    flux = convert_flux(luminosity, FLUX_UNIT, distance=20 * u.Mpc)
+    luminosity_back = convert_flux(flux, LUMINOSITY_UNIT, distance=20 * u.Mpc)
+
+    assert abs(luminosity_back - luminosity) / luminosity <= 1e-6
+
+
+def test_abmag_to_flux_uses_mean_wavelength():
+    """
+    Test that the flux density is placed at the transmission curve's mean
+    wavelength, not at the middle of its wavelength range (6000 Angstrom).
+    """
+    mean_wavelength = 5500 * u.AA
+    curve = TransmissionCurve(
+        [5000, 7000] * u.AA, np.ones(2), mean_wavelength=mean_wavelength
+    )
+    # mock the filter query so the test doesn't query SVO
+    mock_from_filter = MagicMock(return_value=curve)
+    with patch.object(TransmissionCurve, "from_filter", mock_from_filter):
+        flux = convert_flux(
+            20.0 * u.ABmag, FLUX_UNIT, "r", telescope="SLOAN", instrument="SDSS"
+        )
+
+    mock_from_filter.assert_called_once_with("r", telescope="SLOAN", instrument="SDSS")
+
+    flux_density = (20.0 * u.ABmag).to(
+        u.erg / (u.s * u.cm**2 * u.AA), u.spectral_density(mean_wavelength)
+    )
+    expected = flux_density * 2000 * u.AA
+
+    assert abs(flux - expected) / expected <= 1e-6, f"Expected {expected}, got {flux}"
+
+
+def test_flux_density_to_flux_without_filter_raises():
+    with pytest.raises(ValueError, match="filter_name"):
+        convert_flux(1.0 * u.uJy, FLUX_UNIT)
+
+
+def test_flux_to_luminosity_without_distance_raises():
+    with pytest.raises(ValueError, match="distance"):
+        convert_flux(3.21e-14 * FLUX_UNIT, LUMINOSITY_UNIT)
+
+
+def test_unsupported_output_unit_raises():
+    with pytest.raises(ValueError):
+        convert_flux(20.0 * u.ABmag, u.km)
+
+
+@pytest.mark.parametrize(
+    "telescope, instrument",
+    [("SLOAN", "SDSS"), ("Palomar", "ZTF")],
+    ids=["sdss_r", "ztf_r"],
+)
+def test_abmag_to_flux_and_back(telescope, instrument):
+    """
+    Test that AB magnitude converts to flux and back through flux density.
+    """
+    abmag = 20.0 * u.ABmag
+    flux = convert_flux(
+        abmag, FLUX_UNIT, "r", telescope=telescope, instrument=instrument
+    )
+    abmag_back = convert_flux(
+        flux, u.ABmag, "r", telescope=telescope, instrument=instrument
+    )
+
+    assert abs(abmag_back.value - abmag.value) <= 1e-6
+
+
+def test_abmag_to_luminosity_and_back():
+    """
+    Test that AB magnitude converts to luminosity and back through all three
+    converters.
+    """
+    abmag = 20.0 * u.ABmag
+    filter_info = {"filter_name": "r", "telescope": "SLOAN", "instrument": "SDSS"}
+    luminosity = convert_flux(
+        abmag, LUMINOSITY_UNIT, **filter_info, distance=20 * u.Mpc
+    )
+    abmag_back = convert_flux(luminosity, u.ABmag, **filter_info, distance=20 * u.Mpc)
+
+    assert luminosity.unit == LUMINOSITY_UNIT
+    assert abs(abmag_back.value - abmag.value) <= 1e-6
+
+
+@pytest.mark.xfail(reason="Vega magnitudes are not implemented.")
+def test_abmag_to_vegamag():
+    """
+    Test that AB magnitude converts to Vega magnitude.
+    """
+    vegamag = convert_flux(
+        20.0 * u.ABmag, VEGAMAG, "r", telescope="SLOAN", instrument="SDSS"
+    )
+
+    assert vegamag.unit == VEGAMAG

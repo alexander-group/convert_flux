@@ -13,8 +13,8 @@
 - **Debugging:** Debug with print statements and tests first.
 - **Contributing guide:** Follow [CONTRIBUTING.md](CONTRIBUTING.md) for branching, commit messages,
   pull requests, testing, and documentation. Where it conflicts with these preferences, default to [CONTRIBUTING.md](CONTRIBUTING.md) and ask me if more details are required.
-- **AI usage log:** At the end of any task where you wrote, debugged, refactored, or reviewed
-  code, or found or explained outside resources, use the `ai-log`
+- **AI usage log:** Before committing or opening a pull request, if AI wrote, debugged,
+  refactored, or reviewed code, or found or explained outside resources, use the `ai-log`
   skill to update [AI_USAGE.md](AI_USAGE.md). Summarize the general task in a sentence, do not explain every step.
 
 ### 1. Think Before Coding
@@ -75,8 +75,8 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ### These guidelines are working if:
 
-1. fewer unnecessary changes in diffs, 
-2. fewer rewrites due to overcomplication, and 
+1. fewer unnecessary changes in diffs,
+2. fewer rewrites due to overcomplication, and
 3. clarifying questions come before implementation rather than after mistakes.
 
 ## Scientific & Astronomical Software Development

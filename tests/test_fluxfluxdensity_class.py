@@ -51,10 +51,13 @@ def test_flux_to_flux_density(central_wavelength, filter_width, measured_flux):
     transmission = np.ones(2)
 
     flux_density = converter.flux_to_fluxdensity(
-        transmission=transmission, wavelength=wavelength_edges
+        transmission=transmission,
+        wavelength=wavelength_edges,
+        mean_wavelength=central_wavelength,
     )
 
     assert isinstance(flux_density, FluxDensity)
+    assert flux_density.spectral_coordinate == central_wavelength
 
     flux_density = flux_density.quantity.to(
         u.Jy, equivalencies=u.spectral_density(flux_density.spectral_coordinate)

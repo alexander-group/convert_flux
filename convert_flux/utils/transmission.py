@@ -15,15 +15,18 @@ class TransmissionCurve:
     Attributes:
         wavelength (u.Quantity): Wavelength array in astropy units.
         transmission (np.ndarray): Transmission array corresponding to wavelengths.
+        mean_wavelength (u.Quantity): Mean wavelength of the filter, used as the
+            reference wavelength for flux densities.
     """
 
-    def __init__(self, wavelength, transmission):
+    def __init__(self, wavelength, transmission, mean_wavelength=None):
         """
         Initialize TransmissionCurve class with wavelength and transmission arrays.
 
         Parameters:
             wavelength (u.Quantity): Wavelength array in astropy units.
             transmission (np.ndarray): Transmission array corresponding to wavelengths.
+            mean_wavelength (u.Quantity): Mean wavelength of the filter.
 
         Raises:
             TypeError: If wavelength is not an astropy quantity or if wavelength and
@@ -42,6 +45,7 @@ class TransmissionCurve:
 
         self.wavelength = wavelength[order]
         self.transmission = transmission[order]
+        self.mean_wavelength = mean_wavelength
 
     @staticmethod
     def from_filter(
@@ -58,10 +62,11 @@ class TransmissionCurve:
 
         Returns:
             TransmissionCurve object representing the transmission curve and wavelength
-            array.
+            array. Its mean wavelength is the one infer_filter_info returns,
+            integral(wavelength * T) / integral(T).
         """
         try:
-            _, sens = infer_filter_info(filter_name, *args, **kwargs)
+            mean_wavelength, sens = infer_filter_info(filter_name, *args, **kwargs)
         except (MissingDefaultError, LookupError, IndexError, KeyError):
             # throw an error if infer_filter_info from SVO can't find a curve
             # fall back to the user-provided curve, if any
@@ -74,7 +79,9 @@ class TransmissionCurve:
             return curve
 
         wavelength, transmission = sens
-        return TransmissionCurve(wavelength * u.AA, transmission)
+        return TransmissionCurve(
+            wavelength * u.AA, transmission, mean_wavelength * u.AA
+        )
 
 
 class FlatTransmissionCurve(TransmissionCurve):

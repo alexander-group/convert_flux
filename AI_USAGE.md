@@ -49,9 +49,15 @@ Entries are written by the AI tool at the end of a task (see
 
 - **Resources** (Claude Opus 5.5): Explained how synphot converts fluxes and how it
   compares with this package's design.
-- **Code** (Claude Opus 5.5): Modified the `convert_flux()` docstring.
+- **Code** (Claude Opus 5.5): Modified the `convert_flux()` docstring, then planned and
+  wrote its routing logic (unit classification with astropy and a chain of the
+  existing converters) and the tests in `test_convert_flux_routing.py`. Found and
+  fixed bugs in multiple unit tests, and changed `convert_flux()` to use filter
+  arguments and each filter's mean wavelength from `infer_filter_info`.
 - **Refactoring** (Claude Opus 5.5): Updated imports and added `__init__.py` to resolve
   the new file structure.
+- **Debugging** (Claude Opus 5.5): Traced 7 pytest failures to a lost `mean_wavelength`
+  argument in `TransmissionCurve.from_filter` from a merge conflict and restored it.
 
 ### `25-add-and-improve-github-automation`
 
