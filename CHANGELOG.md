@@ -2,6 +2,41 @@
 
 <!-- version list -->
 
+## v0.3.0 (2026-11-20)
+
+### Bug Fixes
+
+- Restore mean wavelength in TransmissionCurve.from_filter
+  ([`1b129e8`](https://github.com/alexander-group/convert_flux/commit/1b129e85db05a90d14af7c54cbe73c1b3d07fc7d))
+
+### Build System
+
+- Fix unit tests that were prev xfail. update convert_flux to work with infer_filter_info
+  inputs/outputs.
+  ([`05003f2`](https://github.com/alexander-group/convert_flux/commit/05003f2bfb85cd41ad1b354376d0e7c92ce37408))
+
+### Documentation
+
+- Info about ai-log skill
+  ([`7bcbc4b`](https://github.com/alexander-group/convert_flux/commit/7bcbc4b592413ba2088b63caa58eef389d75f085))
+
+- Log AI contributions
+  ([`3c16cc3`](https://github.com/alexander-group/convert_flux/commit/3c16cc3949454c8e1215176090a02832b9abed6e))
+
+- Update supported units documentation
+  ([`c164e0a`](https://github.com/alexander-group/convert_flux/commit/c164e0a1fe7472128c9df65e2d97e33a723f0147))
+
+### Features
+
+- Implement convert_flux function using existing converters and brightness models
+  ([`731320f`](https://github.com/alexander-group/convert_flux/commit/731320f878132d2a82bdfb7e7d6e30a248382f4d))
+
+### Testing
+
+- Update unit test to use non-approx transmission curve value
+  ([`7cfa7b5`](https://github.com/alexander-group/convert_flux/commit/7cfa7b525b4023aa8f1172dfb9e51cb968277b00))
+
+
 ## v0.2.1 (2026-11-19)
 
 ### Bug Fixes
