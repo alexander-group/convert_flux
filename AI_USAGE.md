@@ -28,6 +28,14 @@ Entries are written by the AI tool at the end of a task (see
 
 ## Contributions
 
+### `1-implement-queries-to-the-infer_filter_info-package`
+
+*Started 2026-11. Pull request:
+[#34](https://github.com/alexander-group/convert_flux/pull/34).*
+
+- **Code** (Claude Opus 5.5): Wrote `test_validate_infer_filter_info_query`, which uses
+  `MagicMock` to stand in for `infer_filter_info` so the test doesn't query SVO.
+
 ### `33-tracking-ai-usage`
 
 *Started 2026-11. Pull request: TBD.*
@@ -48,6 +56,8 @@ Entries are written by the AI tool at the end of a task (see
   arguments and each filter's mean wavelength from `infer_filter_info`.
 - **Refactoring** (Claude Opus 5.5): Updated imports and added `__init__.py` to resolve
   the new file structure.
+- **Debugging** (Claude Opus 5.5): Traced 7 pytest failures to a lost `mean_wavelength`
+  argument in `TransmissionCurve.from_filter` from a merge conflict and restored it.
 
 ### `25-add-and-improve-github-automation`
 

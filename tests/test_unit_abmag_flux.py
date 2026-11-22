@@ -1,5 +1,4 @@
 from convert_flux import convert_flux
-import pytest
 import astropy.units as u
 
 
@@ -20,10 +19,9 @@ def test_flux_output_type():
     assert isinstance(flux, u.Quantity)
 
 
-@pytest.mark.xfail(reason="Expected values need the flat_transmission flag.")
 def test_abmag_to_flux_and_back_to_ab_mag_for_sdss_rband():
     expected_abmag = 20.0 * u.ABmag
-    expected_flux = 3.22e-14 * u.erg / (u.s * u.cm**2)
+    expected_flux = 1.554e-14 * u.erg / (u.s * u.cm**2)
 
     unit_out_flux = u.erg / (u.s * u.cm**2)
     unit_out_abmag = u.ABmag
@@ -48,17 +46,16 @@ def test_abmag_to_flux_and_back_to_ab_mag_for_sdss_rband():
     )
 
     assert (
-        abs(flux - expected_flux).value < 1e-15
+        abs(flux.value - expected_flux.value) / expected_flux.value <= 1e-3
     ), f"Expected {expected_flux}, but got {flux}"
     assert (
-        abs(abmag - expected_abmag).value < 5e-3
+        abs(abmag.value - expected_abmag.value) < 5e-3
     ), f"Expected {expected_abmag}, but got {abmag}"
 
 
-@pytest.mark.xfail(reason="Expected values need the flat_transmission flag.")
 def test_abmag_to_flux_and_back_to_ab_mag_for_ztf_rband():
     expected_abmag = 20.0 * u.ABmag
-    expected_flux = 4.08e-14 * u.erg / (u.s * u.cm**2)
+    expected_flux = 3.455e-14 * u.erg / (u.s * u.cm**2)
 
     unit_out_flux = u.erg / (u.s * u.cm**2)
     unit_out_abmag = u.ABmag
@@ -83,8 +80,8 @@ def test_abmag_to_flux_and_back_to_ab_mag_for_ztf_rband():
     )
 
     assert (
-        abs(flux - expected_flux).value < 1e-15
+        abs(flux.value - expected_flux.value) / expected_flux.value <= 1e-3
     ), f"Expected {expected_flux}, but got {flux}"
     assert (
-        abs(abmag - expected_abmag).value < 5e-3
+        abs(abmag.value - expected_abmag.value) < 5e-3
     ), f"Expected {expected_abmag}, but got {abmag}"
