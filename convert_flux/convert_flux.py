@@ -39,7 +39,7 @@ def _brightness_kind(unit):
 
     raise ValueError(
         f"{unit} is not a supported brightness unit. Use a magnitude, flux density, "
-        "flux, or luminosity unit (see conversion_units.rst)."
+        "flux, or luminosity unit (see supported_units.rst)."
     )
 
 

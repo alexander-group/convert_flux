@@ -105,14 +105,16 @@ class Mag:
         if not isinstance(spectral_coordinate, u.Quantity):
             raise TypeError("Input spectral_coordinate must be astropy Quantity")
 
-        # Define a custom equivalency for conversions involving Vega magnitudes
-        vega_spec = VegaSpec(
-            catalog=catalog, input_file_path=input_file_path, **spectra_kwargs
-        )
-        wanted_vega_fd = vega_spec.spectral_density_vega(
-            spectral_coordinates=spectral_coordinate
-        )
-        vega_equivalency = VegaMagFluxDensityEquivalency(wanted_vega_fd)
+        # Define a custom equivalency for conversions involving Vega magnitudes.
+        # Only load the Vega spectrum when Vega magnitudes are part of the conversion.
+        if quantity.unit == VEGAMAG or chosen_mag_system == VEGAMAG:
+            vega_spec = VegaSpec(
+                catalog=catalog, input_file_path=input_file_path, **spectra_kwargs
+            )
+            wanted_vega_fd = vega_spec.spectral_density_vega(
+                spectral_coordinates=spectral_coordinate
+            )
+            vega_equivalency = VegaMagFluxDensityEquivalency(wanted_vega_fd)
 
         # Assign the custom equivalency for Vega magnitude
         # Otherwise, assign the default spectral_density equivalency

@@ -23,8 +23,6 @@ def test_flux_density_to_flux(central_wavelength, filter_width, expected_flux):
 
     source_flux_density = FluxDensity(3.631e-5 * u.Jy, central_wavelength)
 
-    # Not sure yet if i like having to define the flux_density in the class call
-    # and the transmission, wavelength in the conversion
     converter = FluxFluxDensity(flux_density=source_flux_density)
     flux = converter.flux_density_to_flux(
         transmission=transmission,
